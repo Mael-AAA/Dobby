@@ -15,13 +15,19 @@ npm start        # puis ouvrir http://localhost:4200
 
 Le site se recharge tout seul à chaque modification. `Ctrl + C` dans le terminal pour l'arrêter.
 
-Version de production (dossier `dist/dobby-site/browser`, à déposer sur Vercel, Netlify ou un hébergement statique) :
+Version de production (dossier `dist/dobby-site/browser`) :
 
 ```bash
 npm run build
 ```
 
-Sur l'hébergeur, rediriger toutes les adresses vers `index.html` (règle « SPA »), sinon `/securite` ou `/devis` renverront une erreur 404 au rechargement.
+## Mise en ligne (Cloudflare Workers, gratuit)
+
+Le fichier `wrangler.jsonc`, à la racine du dépôt, fait tout : à chaque push sur GitHub, Cloudflare lance `npx wrangler deploy`, qui installe les dépendances, compile le site dans `dobby-site` et publie le résultat sur `https://dobby.<sous-domaine>.workers.dev`.
+
+Dans le tableau de bord Cloudflare (Worker « dobby » > Paramètres > Build), garder les réglages par défaut : répertoire racine vide, pas de commande de build, commande de déploiement `npx wrangler deploy`. Le nom du Worker doit rester `dobby`, comme dans `wrangler.jsonc`.
+
+La ligne `"not_found_handling": "single-page-application"` renvoie `index.html` pour toutes les adresses : sans elle, recharger `/securite` ou `/devis` donnerait une erreur 404.
 
 ## Où modifier quoi
 

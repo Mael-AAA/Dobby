@@ -1,0 +1,20 @@
+// Déploiement sur Cloudflare Workers, avec les réglages par défaut de Cloudflare :
+// répertoire racine vide, pas de commande de build, commande de déploiement « npx wrangler deploy ».
+// Wrangler compile lui-même le site Angular (bloc « build ») puis publie les fichiers statiques.
+// Adresse obtenue : https://dobby.<sous-domaine>.workers.dev
+{
+  // doit être identique au nom du Worker dans le tableau de bord Cloudflare
+  "name": "dobby",
+  "compatibility_date": "2026-11-20",
+  "build": {
+    // installe les dépendances et compile le site, dans le dossier dobby-site
+    "command": "npm ci && npm run build",
+    "cwd": "dobby-site"
+  },
+  "assets": {
+    // dossier produit par la compilation
+    "directory": "./dobby-site/dist/dobby-site/browser",
+    // site Angular à une seule page : /securite, /devis… renvoient index.html, le routeur Angular fait le reste
+    "not_found_handling": "single-page-application"
+  }
+}
