@@ -1,0 +1,184 @@
+<!-- 1. Haut de page : Dobby dans la pénombre -->
+<section class="hero" [class.go]="go()" aria-labelledby="hero-titre">
+  <div class="robot">
+    <div class="cadre-robot">
+      <img
+        ngSrc="dobby-buste-nuit"
+        [ngSrcset]="sets"
+        sizes="(min-width: 1024px) 46vw, 92vw"
+        fill
+        priority
+        class="robot-nuit"
+        alt="Dobby, assistant domestique à la visière sombre, de trois quarts dans la pénombre."
+      />
+      <img ngSrc="dobby-buste" [ngSrcset]="sets" sizes="(min-width: 1024px) 46vw, 92vw" fill class="balayage" alt="" aria-hidden="true" />
+      <app-dobby-face [vw]="1600" [vh]="2600" [cx]="1150" [cy]="548" [lit]="regard()" />
+    </div>
+  </div>
+  <div class="voile" aria-hidden="true"></div>
+
+  <div class="shell contenu">
+    <div class="max-w-[44rem]">
+      <h1 id="hero-titre" class="titre-hero">
+        @for (m of mots; track $index; let i = $index) {
+          <span class="mot" [style.--i]="i">{{ m }}</span>{{ ' ' }}
+        }
+      </h1>
+      <p class="intro apparait mt-8" style="--i: 10">{{ t.hero.texte }}</p>
+      <div class="apparait mt-10 flex flex-wrap items-center gap-3" style="--i: 12">
+        <a class="btn btn-primaire" routerLink="/devis" [queryParams]="{ source: 'accueil-hero' }">{{ t.hero.cta }}</a>
+        <a class="btn btn-secondaire" routerLink="/dobby">{{ t.hero.secondaire }}</a>
+      </div>
+      <p class="note apparait mt-4" style="--i: 13">{{ t.hero.note }}</p>
+    </div>
+
+    <aside class="verre apparait" style="--i: 15" aria-labelledby="essai-titre">
+      <p class="text-sm font-semibold text-givre">Dobby, {{ t.hero.etiquette | lowercase }}</p>
+      <p class="mt-1 text-xs text-lac">{{ t.hero.fiche[0] }}, {{ t.hero.fiche[1] }}</p>
+      <div class="mt-4 flex items-center gap-4">
+        <button type="button" class="bouton-arret" (click)="essayer()" aria-describedby="essai-texte">
+          <span class="sr-only">{{ t.hero.arretBouton }} l'arrêt d'urgence</span>
+        </button>
+        <div>
+          <p id="essai-titre" class="font-semibold text-neige">{{ t.hero.arretTitre }}</p>
+          <p id="essai-texte" class="text-sm text-brume">{{ t.hero.arretTexte }}</p>
+        </div>
+      </div>
+      <button type="button" class="essayez" (click)="essayer()">{{ t.hero.arretBouton }}</button>
+    </aside>
+
+    <button type="button" class="defiler apparait" style="--i: 16" (click)="descendre()">
+      <span class="trait" aria-hidden="true"><i></i></span>{{ t.hero.defiler }}
+    </button>
+  </div>
+</section>
+
+<!-- 2. Bandeau de réassurance -->
+<section id="reassurance" class="border-y filet" aria-label="Nos engagements">
+  <ul class="shell grid grid-cols-2 gap-x-6 gap-y-5 py-8 lg:grid-cols-4">
+    @for (r of t.reassurance; track r; let i = $index) {
+      <li class="flex items-center gap-3 text-[0.95rem] font-medium text-neige" [appReveal]="i">
+        <span class="regard" aria-hidden="true"></span>{{ r }}
+      </li>
+    }
+  </ul>
+</section>
+
+<!-- 3. Une soirée avec Dobby -->
+<app-soiree />
+
+<!-- 4. Ce qu'il fait -->
+<app-savoir-faire />
+
+<!-- 5. Pourquoi lui ouvrir votre porte ? -->
+<section class="band theme-encre" aria-labelledby="confiance-titre">
+  <div class="shell grid gap-14 lg:grid-cols-12 lg:items-center">
+    <div class="relative lg:col-span-5" appReveal>
+      <app-lit-photo
+        name="nuque"
+        alt="La nuque de Dobby vue de dos : revêtement tricoté gris, visière noire."
+        sizes="(min-width: 1024px) 40vw, 100vw"
+        position="45% 50%"
+        class="aspect-[4/5] rounded-[32px]"
+      >
+        <span class="cible" style="left: 52%; top: 48%" aria-hidden="true"><i></i></span>
+      </app-lit-photo>
+      <p class="mt-4 flex items-center gap-3 text-sm text-brume"><span class="cible-mini" aria-hidden="true"></span>{{ t.confiance.bouton }}</p>
+    </div>
+
+    <div class="lg:col-span-7 lg:pl-8">
+      <h2 id="confiance-titre" class="titre" appReveal>{{ t.confiance.titre }}</h2>
+      <p class="intro mt-6" appReveal="1">{{ t.confiance.texte }}</p>
+      <ul class="mt-12 grid gap-x-10 gap-y-9 sm:grid-cols-2">
+        @for (b of t.confiance.blocs; track b.titre; let i = $index) {
+          <li [appReveal]="i + 1">
+            <h3 class="flex items-start gap-3 text-[1.15rem] font-semibold text-neige">
+              <span class="regard mt-[0.35em]" aria-hidden="true"></span>{{ b.titre }}
+            </h3>
+            <p class="mt-2 pl-[1.15rem] text-brume">{{ b.texte }}</p>
+          </li>
+        }
+      </ul>
+      <div class="mt-12 flex flex-wrap items-center gap-x-8 gap-y-5" appReveal="3">
+        <div>
+          <a class="btn btn-primaire" routerLink="/devis" [queryParams]="{ source: 'accueil-confiance', motif: 'demo' }">{{
+            t.confiance.cta
+          }}</a>
+          <p class="note mt-3">{{ t.confiance.note }}</p>
+        </div>
+        <a routerLink="/securite" class="lien self-start sm:self-auto">{{ t.confiance.lien }} <app-fleche /></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Les chiffres -->
+<app-chiffres />
+
+<!-- 7. L'application -->
+<section class="band overflow-hidden" aria-labelledby="appli-titre">
+  <div class="shell grid gap-14 lg:grid-cols-12 lg:items-center">
+    <div class="appli-scene lg:col-span-6" appReveal>
+      <div class="flou" aria-hidden="true">
+        <img ngSrc="linge2-nuit" ngSrcset="800w" sizes="50vw" fill alt="" />
+      </div>
+      <div #tel class="relative mx-auto w-fit">
+        <app-phone [on]="ecranAppli()" heure="18:44" [width]="280">
+          <div class="flex h-full flex-col gap-3 px-4 pt-2 pb-5 text-[13px]">
+            <p class="flex items-center justify-between">
+              <span class="font-display text-[1.6rem] leading-none">Paris 16e</span>
+              <span class="flex items-center gap-1.5 text-xs text-givre"><span class="regard"></span>Dobby est là</span>
+            </p>
+            <div class="rounded-2xl bg-orage/60 p-3">
+              <p class="text-xs text-lac">Raccourci</p>
+              <p class="mt-1 flex items-center justify-between font-semibold">
+                Nourrir Plume
+                <span class="rounded-full bg-givre px-2.5 py-1 text-[11px] font-bold text-nuit">Envoyé</span>
+              </p>
+            </div>
+            <div class="bulle-dobby">
+              <p>C’est fait. Plume a mangé à 18&nbsp;h&nbsp;45.</p>
+              <app-chat class="mt-2 aspect-[3/2] overflow-hidden rounded-xl" />
+            </div>
+            <div class="mt-auto flex items-center gap-2 rounded-full border border-brume/25 px-4 py-2.5 text-lac">Écrire à Dobby</div>
+          </div>
+        </app-phone>
+      </div>
+    </div>
+    <div class="lg:col-span-5 lg:col-start-8">
+      <h2 id="appli-titre" class="titre" appReveal>{{ t.application.titre }}</h2>
+      <p class="intro mt-6" appReveal="1">{{ t.application.texte }}</p>
+      <a routerLink="/application" class="lien mt-10" appReveal="2">{{ t.application.lien }} <app-fleche /></a>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Témoignages -->
+<app-temoins />
+
+<!-- 9. Garanties -->
+<section class="band border-t filet" aria-labelledby="garanties-titre">
+  <div class="shell">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <h2 id="garanties-titre" class="titre" appReveal>{{ t.garanties.titre }}</h2>
+      <a routerLink="/garanties" class="lien" appReveal="1">{{ t.garanties.lien }} <app-fleche /></a>
+    </div>
+    <ul class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      @for (g of t.garanties.items; track g.label; let i = $index) {
+        <li class="border-t filet pt-6" [appReveal]="i">
+          <p class="font-display text-[clamp(2.8rem,4.4vw,3.8rem)] leading-none whitespace-nowrap text-givre">{{ g.chiffre }}</p>
+          <p class="mt-4 text-neige">{{ g.label }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- 10. Appel final -->
+<app-cta-block
+  [titre]="t.appel.titre"
+  [texte]="t.appel.texte"
+  [cta]="t.appel.cta"
+  [note]="t.appel.note"
+  [params]="{ source: 'accueil-fin' }"
+/>

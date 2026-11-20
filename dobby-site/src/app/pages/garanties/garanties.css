@@ -1,0 +1,196 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-encre);
+}
+.dix {
+  position: absolute;
+  right: -2%;
+  bottom: -14%;
+  width: min(78vw, 860px);
+  pointer-events: none;
+}
+.dix text {
+  font-family: 'Chiffres', 'Italiana', serif;
+  font-size: 440px;
+  fill: none;
+  stroke: rgb(184 226 242 / 0.35);
+  stroke-width: 1.5;
+  stroke-dasharray: 2600;
+  stroke-dashoffset: 2600;
+  animation: ecrit 3.6s var(--ease-dobby) 300ms forwards;
+}
+@keyframes ecrit {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Le contrat */
+.contrat {
+  padding: clamp(24px, 4vw, 52px);
+  border-radius: 6px;
+  background: #eef6f9;
+  color: var(--color-orage);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
+}
+.entete-contrat {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgb(64 78 84 / 0.25);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-orage);
+}
+.article {
+  padding: 22px 0;
+  border-bottom: 1px solid rgb(64 78 84 / 0.15);
+}
+.numero {
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-orage);
+}
+.valeur {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--color-nuit);
+  white-space: nowrap;
+}
+.signature {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 28px;
+}
+.paraphe {
+  width: 160px;
+  margin-top: 6px;
+}
+.paraphe ellipse {
+  fill: var(--color-nuit);
+  opacity: 0;
+  transition: opacity 500ms var(--ease-dobby) 1100ms;
+}
+.paraphe path {
+  fill: none;
+  stroke: var(--color-nuit);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1200ms var(--ease-dobby);
+}
+.paraphe.signe ellipse {
+  opacity: 1;
+}
+.paraphe.signe path {
+  stroke-dashoffset: 0;
+}
+
+/* Frise d'installation */
+.frise {
+  position: relative;
+  display: grid;
+  gap: 36px;
+  padding-left: 34px;
+}
+.rail {
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: rgb(157 193 207 / 0.18);
+}
+.rail i {
+  position: absolute;
+  inset: 0;
+  background: var(--color-givre);
+  transform-origin: top;
+  transform: scaleY(var(--avance, 0));
+  box-shadow: 0 0 10px rgb(184 226 242 / 0.6);
+}
+.frise li {
+  position: relative;
+}
+.jalon {
+  position: absolute;
+  left: -34px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--color-ardoise);
+  background: var(--color-encre);
+  transition:
+    border-color 400ms,
+    background 400ms,
+    box-shadow 400ms;
+}
+.atteinte .jalon {
+  border-color: var(--color-givre);
+  background: var(--color-givre);
+  box-shadow: 0 0 12px rgb(184 226 242 / 0.7);
+}
+@media (min-width: 1024px) {
+  .frise {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 28px;
+    padding-left: 0;
+    padding-top: 44px;
+  }
+  .rail {
+    left: 8px;
+    right: 8px;
+    top: 7px;
+    bottom: auto;
+    width: auto;
+    height: 2px;
+  }
+  .rail i {
+    transform-origin: left;
+    transform: scaleX(var(--avance, 0));
+  }
+  .jalon {
+    left: 0;
+    top: -44px;
+  }
+}
+
+/* Formules */
+.formule {
+  display: flex;
+  flex-direction: column;
+  padding: 32px 28px 28px;
+  border-radius: var(--radius-bloc);
+  background: rgb(64 78 84 / 0.22);
+  border: 1px solid rgb(157 193 207 / 0.16);
+  transition:
+    transform 450ms var(--ease-dobby),
+    border-color 450ms;
+}
+.formule:hover {
+  transform: translateY(-8px);
+  border-color: var(--color-brume);
+}
+.formule.phare {
+  background: rgb(64 78 84 / 0.55);
+  border-color: var(--color-givre);
+}
+.recommandee {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-givre);
+}
+
+.formule .note {
+  color: var(--color-brume);
+}

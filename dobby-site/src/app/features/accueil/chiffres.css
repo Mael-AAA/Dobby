@@ -1,0 +1,121 @@
+.tuile {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgb(184 226 242 / 0.25);
+}
+.ville,
+.semaine,
+.regards,
+.zero {
+  width: 100%;
+  height: 170px;
+}
+.legende {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+.chiffre {
+  flex: none;
+  color: var(--color-neige);
+}
+.unite {
+  font-size: 0.5em;
+}
+.label {
+  display: block;
+  font-size: 1.06rem;
+  font-weight: 600;
+  color: var(--color-neige);
+}
+.detail {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.92rem;
+  color: var(--color-givre);
+}
+
+/* semaine : 7 jours × 24 heures */
+.semaine {
+  display: grid;
+  grid-template-columns: 18px repeat(24, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 3px;
+  align-items: stretch;
+}
+.jour {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-givre);
+  align-self: center;
+}
+.case {
+  border-radius: 2px;
+  background: rgb(21 29 32 / 0.45);
+  transition:
+    background 600ms var(--ease-dobby),
+    box-shadow 600ms var(--ease-dobby);
+  transition-delay: calc(var(--k) * 45ms + 200ms);
+}
+.vu .case.rendue {
+  background: var(--color-givre);
+  box-shadow: 0 0 8px rgb(184 226 242 / 0.6);
+}
+.graduation {
+  font-size: 0.7rem;
+  color: var(--color-givre);
+  align-self: end;
+}
+
+/* cent regards */
+.regards {
+  display: grid;
+  grid-template-columns: repeat(25, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 8px 6px;
+  justify-items: center;
+  align-items: center;
+}
+.regards span {
+  width: min(100%, 12px);
+  aspect-ratio: 3 / 5;
+  border-radius: 50%;
+  background: rgb(21 29 32 / 0.5);
+  transition:
+    background 500ms var(--ease-dobby),
+    box-shadow 500ms var(--ease-dobby);
+  transition-delay: calc(var(--k) * 60ms + 150ms);
+}
+.vu.regards span:not(.eteint) {
+  background: var(--color-givre);
+  box-shadow: 0 0 7px rgb(184 226 242 / 0.55);
+}
+
+/* zéro : un regard, grand ouvert */
+.zero {
+  display: flex;
+  align-items: center;
+}
+.zero svg {
+  height: 100%;
+  overflow: visible;
+}
+.zero ellipse {
+  fill: var(--color-givre);
+  filter: drop-shadow(0 0 14px rgb(184 226 242 / 0.7));
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cligne 5.5s ease-in-out 2s infinite;
+}
+@keyframes cligne {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.08);
+  }
+}

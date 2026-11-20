@@ -1,0 +1,114 @@
+<section class="hero" aria-labelledby="faq-titre">
+  <div class="shell pt-40 pb-14 lg:pt-48">
+    <h1 id="faq-titre" class="titre-hero max-w-[14ch]" appReveal>{{ t.titre }}</h1>
+    <p class="intro mt-8" appReveal="1">{{ t.intro }}</p>
+    <div class="recherche mt-12" appReveal="2" role="search">
+      <label for="faq-recherche" class="sr-only">{{ t.recherche }}</label>
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.6" />
+        <path d="M14 14l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+      </svg>
+      <input
+        id="faq-recherche"
+        type="search"
+        class="champ"
+        [placeholder]="t.recherche"
+        [value]="recherche()"
+        (input)="chercher($event)"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+</section>
+
+<section class="band pt-10" aria-label="Questions">
+  <div class="shell grid gap-10 lg:grid-cols-12">
+    <div class="lg:col-span-3">
+      @if (!termes().length) {
+        <div role="tablist" aria-label="Thèmes" class="onglets">
+          @for (th of t.themes; track th.id; let i = $index) {
+            <button
+              type="button"
+              role="tab"
+              [id]="'onglet-' + th.id"
+              [attr.aria-selected]="theme() === th.id"
+              [attr.tabindex]="theme() === th.id ? 0 : -1"
+              aria-controls="faq-liste"
+              (click)="choisirTheme(th.id)"
+              (keydown)="clavier($event, i)"
+            >
+              <span class="regard" [class.regard-eteint]="theme() !== th.id" aria-hidden="true"></span>{{ th.label }}
+            </button>
+          }
+        </div>
+      } @else {
+        <p class="text-sm text-brume" aria-live="polite">
+          {{ liste().length }} {{ t.resultats }}{{ liste().length > 1 ? 's' : '' }}
+        </p>
+        <button type="button" class="lien mt-4" (click)="recherche.set('')">{{ t.effacer }}</button>
+      }
+    </div>
+
+    <div class="lg:col-span-8 lg:col-start-5">
+      <div id="faq-liste" [attr.role]="termes().length ? null : 'tabpanel'" [attr.aria-labelledby]="termes().length ? null : 'onglet-' + theme()">
+        @for (q of liste(); track q.id) {
+          <div class="question" [class.ouverte]="ouverte() === q.id">
+            <h2>
+              <button
+                type="button"
+                class="entete"
+                [attr.aria-expanded]="ouverte() === q.id"
+                [attr.aria-controls]="'rep-' + q.id"
+                [id]="'q-' + q.id"
+                (click)="basculer(q.id)"
+              >
+                <span class="flex-1 text-left">
+                  @if (termes().length) {
+                    <span class="mb-1 block text-xs font-semibold text-lac">{{ libelleTheme(q.theme) }}</span>
+                  }
+                  @for (m of q.qm; track $index) {
+                    @if (m.m) {
+                      <mark>{{ m.t }}</mark>
+                    } @else {
+                      {{ m.t }}
+                    }
+                  }
+                </span>
+                <span class="signe" aria-hidden="true"></span>
+              </button>
+            </h2>
+            <div class="reponse" [id]="'rep-' + q.id" role="region" [attr.aria-labelledby]="'q-' + q.id">
+              <div class="interieur">
+                <p>
+                  @for (m of q.rm; track $index) {
+                    @if (m.m) {
+                      <mark>{{ m.t }}</mark>
+                    } @else {
+                      {{ m.t }}
+                    }
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="vide">
+            <p>{{ t.aucun }}</p>
+            <a class="lien mt-4" routerLink="/devis" [queryParams]="{ source: 'faq', motif: 'question' }">{{ t.appel.cta }} <app-fleche /></a>
+          </div>
+        }
+        @if (liste().length && !termes().length) {
+          <a class="lien mt-10" routerLink="/devis" [queryParams]="{ source: 'faq', motif: 'question' }">{{ t.appel.cta }} <app-fleche /></a>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-cta-block
+  [titre]="t.appel.titre"
+  [texte]="t.appel.texte"
+  [cta]="t.appel.cta"
+  [note]="t.appel.note"
+  [params]="{ source: 'faq', motif: 'question' }"
+/>

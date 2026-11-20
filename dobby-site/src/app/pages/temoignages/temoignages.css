@@ -1,0 +1,171 @@
+.hero {
+  background:
+    radial-gradient(50% 70% at 85% 30%, rgb(64 78 84 / 0.4), transparent 70%),
+    var(--color-encre);
+}
+.chiffres-hero {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+}
+.chiffres-hero > div {
+  padding: 0 clamp(12px, 2vw, 28px);
+  border-left: 1px solid rgb(157 193 207 / 0.2);
+}
+.chiffres-hero > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.puce {
+  min-height: 44px;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgb(157 193 207 / 0.3);
+  color: var(--color-neige);
+  font-weight: 600;
+  transition: all 300ms var(--ease-dobby);
+}
+.puce:hover {
+  border-color: var(--color-givre);
+}
+.puce[aria-pressed='true'] {
+  background: var(--color-givre);
+  border-color: var(--color-givre);
+  color: var(--color-nuit);
+}
+.temoin {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  border-radius: var(--radius-carte);
+  background: rgb(64 78 84 / 0.22);
+  border: 1px solid rgb(157 193 207 / 0.14);
+  animation: entre 700ms var(--ease-dobby) both;
+  animation-delay: calc(var(--k) * 90ms);
+}
+@keyframes entre {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+.temoin blockquote {
+  flex: 1;
+}
+/* La crainte est barrée d'un trait de lumière : elle a été levée */
+.barre-peur {
+  font-size: 0.95rem;
+  color: var(--color-lac);
+  background: linear-gradient(var(--color-givre), var(--color-givre)) left 55% / 100% 1.5px no-repeat;
+}
+.monogramme {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgb(184 226 242 / 0.4);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--color-givre);
+}
+
+/* Médias fictifs : deux logotypes typographiques */
+.logo-media {
+  font-size: 1.1rem;
+  color: var(--color-brume);
+}
+.logo-media.serif {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+}
+.logo-media.sans {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* Mur #MonDobby : trois colonnes qui glissent lentement */
+.reseau-nom {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgb(157 193 207 / 0.3);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-neige);
+}
+.mur {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  height: min(78vh, 760px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(transparent, #000 8%, #000 92%, transparent);
+}
+.colonne {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: glisse 26s ease-in-out infinite alternate;
+}
+.colonne.inverse {
+  animation-direction: alternate-reverse;
+  animation-duration: 30s;
+}
+@keyframes glisse {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-22%);
+  }
+}
+.mur:hover .colonne {
+  animation-play-state: paused;
+}
+.tuile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+}
+.tuile img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  transition: transform 800ms var(--ease-dobby);
+}
+.tuile:hover img {
+  transform: scale(1.05);
+}
+.legende {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 30px 14px 12px;
+  background: linear-gradient(transparent, rgb(13 19 22 / 0.88));
+  color: var(--color-neige);
+  font-size: 0.85rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 400ms var(--ease-dobby),
+    transform 400ms var(--ease-dobby);
+}
+.tuile:hover .legende,
+.tuile:focus-within .legende {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: none) {
+  .legende {
+    opacity: 1;
+    transform: none;
+    font-size: 0.75rem;
+  }
+}

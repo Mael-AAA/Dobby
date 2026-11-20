@@ -1,0 +1,144 @@
+<!-- 1. Hero : la maison s'allume -->
+<section class="hero" aria-labelledby="maison-titre">
+  <div class="shell grid gap-12 pt-36 pb-20 lg:grid-cols-12 lg:items-end lg:pt-44">
+    <div class="lg:col-span-6">
+      <h1 id="maison-titre" class="titre-hero" appReveal>{{ t.hero.titre }}</h1>
+      <p class="intro mt-8" appReveal="1">{{ t.hero.texte }}</p>
+    </div>
+    <div class="lg:col-span-6" appReveal="1">
+      <app-facade [lit]="maisonAllumee()" class="aspect-[5/4] overflow-hidden rounded-[32px]" />
+    </div>
+  </div>
+</section>
+
+<!-- 2. Notre histoire : la frise avance au défilement -->
+<section #frise class="frise-section" aria-labelledby="histoire-titre">
+  <div class="shell">
+    <h2 id="histoire-titre" class="titre" appReveal>{{ t.histoire.titre }}</h2>
+  </div>
+  <div class="frise-cadre">
+    <ol #piste class="piste">
+      @for (d of t.histoire.dates; track d.annee; let i = $index) {
+        <li class="date" [class.passee]="i <= annee()">
+          <span class="point" aria-hidden="true"></span>
+          <p class="annee">{{ d.annee }}</p>
+          <p class="mt-4 text-[1.05rem] text-brume">{{ d.texte }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- 3. Les fondateurs -->
+<section class="band theme-encre" aria-labelledby="fondateurs-titre">
+  <div class="shell">
+    <h2 id="fondateurs-titre" class="titre" appReveal>{{ t.fondateurs.titre }}</h2>
+    <div class="mt-14 grid gap-12 lg:grid-cols-2">
+      @for (f of t.fondateurs.items; track f.nom; let i = $index) {
+        <figure class="fondateur" [appReveal]="i">
+          <div class="portrait" aria-hidden="true">
+            <span>{{ f.initiales }}</span>
+          </div>
+          <div>
+            <blockquote class="font-display text-[clamp(1.6rem,2.4vw,2.1rem)] leading-snug text-neige">«&nbsp;{{ f.citation }}&nbsp;»</blockquote>
+            <figcaption class="mt-6">
+              <span class="block font-semibold text-neige">{{ f.nom }}</span>
+              <span class="block text-sm text-lac">{{ f.role }}</span>
+            </figcaption>
+          </div>
+        </figure>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- 4. Nos engagements -->
+<section class="band" aria-labelledby="eng-titre">
+  <div class="shell">
+    <h2 id="eng-titre" class="titre" appReveal>{{ t.engagements.titre }}</h2>
+    <ul class="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2">
+      @for (e of t.engagements.items; track e.titre; let i = $index) {
+        <li class="border-t filet pt-6" [appReveal]="i">
+          <h3 class="font-display text-[2rem] leading-tight text-neige">{{ e.titre }}</h3>
+          <p class="mt-3 text-[1.05rem] text-brume">{{ e.texte }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- 5. L'atelier -->
+<section class="band theme-encre overflow-hidden" aria-labelledby="atelier-titre">
+  <div class="shell grid gap-12 lg:grid-cols-12 lg:items-center">
+    <div class="lg:col-span-7" appReveal>
+      <div class="atelier-photo">
+        <img ngSrc="nuque" [ngSrcset]="sets" sizes="(min-width: 1024px) 56vw, 100vw" fill [alt]="t.atelier.alt" class="object-cover" />
+      </div>
+    </div>
+    <div class="lg:col-span-5">
+      <h2 id="atelier-titre" class="titre" appReveal>{{ t.atelier.titre }}</h2>
+      <p class="intro mt-6" appReveal="1">{{ t.atelier.texte }}</p>
+      <dl class="mt-10 grid grid-cols-2 gap-6" appReveal="2">
+        @for (c of t.atelier.chiffres; track c.l) {
+          <div>
+            <dt class="sr-only">{{ c.l }}</dt>
+            <dd class="font-display text-[3rem] leading-none text-givre">{{ c.v }}</dd>
+            <dd class="mt-2 text-sm text-brume">{{ c.l }}</dd>
+          </div>
+        }
+      </dl>
+    </div>
+  </div>
+  <!-- La ligne des Aravis, tracée au défilement -->
+  <svg #crete class="crete" [class.vue]="creteVue()" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
+    <path
+      pathLength="1"
+      d="M0 150 L120 118 L190 128 L260 84 L320 102 L380 60 L430 86 L470 70 L520 96 L600 52 L660 78 L720 36 L790 74 L850 60 L910 92 L980 66 L1040 98 L1110 74 L1180 108 L1250 92 L1330 124 L1440 112"
+    />
+  </svg>
+</section>
+
+<!-- 6. Le comité d'éthique -->
+<section class="band" aria-labelledby="comite-titre">
+  <div class="shell grid gap-12 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <h2 id="comite-titre" class="titre" appReveal>{{ t.comite.titre }}</h2>
+      <p class="intro mt-6" appReveal="1">{{ t.comite.texte }}</p>
+    </div>
+    <ul class="flex flex-col lg:col-span-6 lg:col-start-7" appReveal="1">
+      @for (m of t.comite.membres; track m) {
+        <li class="flex items-center gap-4 border-b filet py-4 text-[1.1rem] text-neige">
+          <span class="regard" aria-hidden="true"></span>{{ m }}
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- 7. Nos partenaires : un bandeau qui défile -->
+<section class="band theme-encre overflow-hidden" aria-labelledby="partenaires-titre">
+  <div class="shell">
+    <h2 id="partenaires-titre" class="titre" appReveal>{{ t.partenaires.titre }}</h2>
+  </div>
+  <div class="bandeau mt-14" appReveal="1">
+    <ul class="defile-partenaires">
+      @for (tour of [0, 1]; track tour) {
+        @for (p of t.partenaires.items; track p.nom; let i = $index) {
+          <li class="partenaire" [attr.aria-hidden]="tour === 1 ? 'true' : null">
+            <span class="marque" [class]="'m' + i">{{ p.nom }}</span>
+            <span class="mt-2 block text-sm text-lac">{{ p.role }}</span>
+          </li>
+        }
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- 8. Appel -->
+<app-cta-block
+  [titre]="t.appel.titre"
+  [texte]="t.appel.texte"
+  [cta]="t.appel.cta"
+  [note]="t.appel.note"
+  [params]="{ source: 'maison', motif: 'showroom' }"
+/>

@@ -1,0 +1,137 @@
+<!-- 1. Hero : le téléphone s'allume -->
+<section class="hero" aria-labelledby="appli-titre">
+  <div class="halo" [class.on]="ecran()" aria-hidden="true"></div>
+  <div class="shell grid gap-12 pt-36 pb-24 lg:grid-cols-12 lg:items-center lg:pt-32">
+    <div class="lg:col-span-6">
+      <h1 id="appli-titre" class="titre-hero" appReveal>{{ t.hero.titre }}</h1>
+      <p class="intro mt-8" appReveal="1">{{ t.hero.texte }}</p>
+    </div>
+    <div class="flex justify-center lg:col-span-5 lg:col-start-8" appReveal="1">
+      <app-phone [on]="ecran()" heure="18:44" [width]="300">
+        <div class="accueil-appli">
+          <p class="flex items-baseline justify-between">
+            <span class="font-display text-[1.8rem] leading-none">Paris 16e</span>
+            <span class="text-xs text-lac">21&nbsp;°C</span>
+          </p>
+          <div class="carte-etat">
+            <p class="flex items-center gap-2 text-xs font-semibold text-givre"><span class="regard"></span>Dobby est au salon</p>
+            <p class="mt-2 text-[15px] font-semibold">Range la bibliothèque</p>
+            <div class="mt-3 flex items-center gap-2 text-[11px] text-lac">
+              <span class="batterie"><i style="width: 82%"></i></span> 82&nbsp;%
+            </div>
+          </div>
+          <p class="text-xs text-lac">Raccourcis</p>
+          <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+            <span class="raccourci">Nourrir Plume</span>
+            <span class="raccourci">Lessive</span>
+            <span class="raccourci">Dîner</span>
+          </div>
+          <span class="arret-tel">Arrêter Dobby</span>
+        </div>
+      </app-phone>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Confier une tâche -->
+<app-demo-tache />
+
+<!-- 3. Savoir ce qu'il fait -->
+<app-journal />
+
+<!-- 4. Garder le contrôle -->
+<section class="band" aria-labelledby="controle-titre">
+  <div class="shell">
+    <h2 id="controle-titre" class="titre" appReveal>{{ t.controle.titre }}</h2>
+    <ul class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      @for (f of t.controle.fonctions; track f.id; let i = $index) {
+        <li class="fonction" [class.rouge]="f.id === 'arret'" [appReveal]="i">
+          <div class="mini" aria-hidden="true">
+            @switch (f.id) {
+              @case ('arret') {
+                <span class="mini-arret"></span>
+              }
+              @case ('zones') {
+                <svg viewBox="0 0 120 80"><rect x="4" y="4" width="54" height="34" class="m-p" /><rect x="62" y="4" width="54" height="34" class="m-p m-priv" /><rect x="4" y="42" width="112" height="34" class="m-p" /></svg>
+              }
+              @case ('budget') {
+                <p class="font-display text-[2.6rem] leading-none text-neige">140&nbsp;€</p>
+                <p class="mt-1 text-xs text-lac">budget : 100&nbsp;€</p>
+              }
+              @default {
+                <span class="flex gap-2">
+                  <span class="avatar">C</span><span class="avatar">A</span><span class="avatar petit">L</span><span class="avatar petit">J</span>
+                </span>
+              }
+            }
+          </div>
+          <h3 class="mt-6 text-[1.1rem] font-semibold text-neige">{{ f.titre }}</h3>
+          <p class="mt-2 text-brume">{{ f.texte }}</p>
+          @if (f.id === 'arret') {
+            <button type="button" class="btn-arret mt-6" (click)="arreter()">{{ t.controle.arret }}</button>
+          }
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- 5. Plusieurs résidences -->
+<section class="band theme-encre overflow-hidden" aria-labelledby="res-titre">
+  <div class="shell grid gap-6 lg:grid-cols-12">
+    <h2 id="res-titre" class="titre lg:col-span-6" appReveal>{{ t.residences.titre }}</h2>
+    <p class="intro lg:col-span-5 lg:col-start-8" appReveal="1">{{ t.residences.texte }}</p>
+  </div>
+  <div #rail class="rail" (scroll)="suiviRail()" tabindex="0" role="region" aria-label="Les trois résidences, faites glisser">
+    @for (e of t.residences.ecrans; track e.id; let i = $index) {
+      <div class="diapo" [class.actif]="i === residence()">
+        <app-phone [width]="260" heure="19:02">
+          <div class="accueil-appli">
+            <p class="font-display text-[1.7rem] leading-none">{{ e.nom }}</p>
+            <p class="text-xs text-lac">{{ e.temp }}</p>
+            <div class="carte-etat">
+              <p class="flex items-center gap-2 text-xs font-semibold text-givre"><span class="regard"></span>Dobby</p>
+              <p class="mt-2 text-[14px] font-semibold">{{ e.etat }}</p>
+              <div class="mt-3 flex items-center gap-2 text-[11px] text-lac">
+                <span class="batterie"><i [style.width.%]="e.batterie"></i></span> {{ e.batterie }}&nbsp;%
+              </div>
+            </div>
+            <p class="raccourci text-left text-[12px]">{{ e.tache }}</p>
+            <span class="arret-tel">Arrêter Dobby</span>
+          </div>
+        </app-phone>
+      </div>
+    }
+  </div>
+  <div class="shell mt-8 flex items-center justify-center gap-3">
+    <button type="button" class="rond" (click)="allerResidence(residence() - 1)" [attr.aria-label]="t.residences.precedent"><app-fleche class="rotate-180" /></button>
+    @for (e of t.residences.ecrans; track e.id; let i = $index) {
+      <button type="button" class="point-nav" [attr.aria-pressed]="i === residence()" (click)="allerResidence(i)">{{ e.nom }}</button>
+    }
+    <button type="button" class="rond" (click)="allerResidence(residence() + 1)" [attr.aria-label]="t.residences.suivant"><app-fleche /></button>
+  </div>
+</section>
+
+<!-- 6. Disponibilité -->
+<section class="band" aria-labelledby="dispo-titre">
+  <div class="shell grid gap-10 lg:grid-cols-12 lg:items-center">
+    <div class="lg:col-span-6">
+      <h2 id="dispo-titre" class="titre" appReveal>{{ t.dispo.titre }}</h2>
+      <p class="intro mt-6" appReveal="1">{{ t.dispo.texte }}</p>
+    </div>
+    <div class="flex flex-col gap-3 lg:col-span-5 lg:col-start-8 lg:items-end" appReveal="1">
+      <div class="flex flex-wrap gap-3">
+        @for (b of t.dispo.badges; track b) {
+          <span class="badge-store">
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2v9M5 7.5 9 11.5l4-4M3 15h12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            {{ b }}
+          </span>
+        }
+      </div>
+      <p class="text-xs text-lac">{{ t.dispo.fictif }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Appel -->
+<app-cta-block [cta]="t.appel.cta" [note]="t.appel.note" [params]="{ source: 'appli-fin' }" />

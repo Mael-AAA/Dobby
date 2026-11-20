@@ -1,0 +1,142 @@
+<!-- 1. Hero produit -->
+<section #hero class="hero" aria-labelledby="dobby-titre">
+  <div class="shell grille">
+    <div class="texte">
+      <h1 id="dobby-titre" class="titre-hero">{{ t.hero.titre }}</h1>
+      <p class="intro mt-8">{{ t.hero.texte }}</p>
+      <div class="mt-10">
+        <a class="btn btn-primaire" routerLink="/devis" [queryParams]="{ source: 'dobby-hero' }">{{ t.hero.cta }}</a>
+        <p class="note mt-3">{{ t.hero.note }}</p>
+      </div>
+    </div>
+    <div class="scene">
+      <div #robot class="robot">
+        <img
+          ngSrc="dobby-pied-nuit"
+          [ngSrcset]="sets"
+          sizes="(min-width: 1024px) 30vw, 70vw"
+          fill
+          priority
+          alt="Dobby en pied, de face : visière sombre, revêtement clair, silhouette fine."
+        />
+        <app-dobby-face [vw]="1700" [vh]="4534" [cx]="443" [cy]="548" [lit]="lit()" />
+      </div>
+      <ul class="reperes">
+        @for (r of t.hero.reperes; track r.valeur) {
+          <li class="repere-hero">
+            <span class="block font-display text-[1.3rem] leading-tight text-neige lg:text-[1.9rem] lg:leading-none">{{ r.valeur }}</span>
+            <span class="mt-1 block text-sm text-brume">{{ r.detail }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Lui parler -->
+<app-mission />
+
+<!-- 3. Les cinq savoir-faire -->
+<section class="band border-t filet" aria-labelledby="sf-titre">
+  <div class="shell">
+    <h2 id="sf-titre" class="titre" appReveal>{{ t.savoirFaire.titre }}</h2>
+    <div class="mt-14 grid gap-12 lg:grid-cols-12">
+      <nav class="sommaire hidden lg:col-span-3 lg:block" aria-label="Les cinq savoir-faire">
+        <ul>
+          @for (s of t.savoirFaire.items; track s.id) {
+            <li>
+              <button type="button" (click)="aller(s.id)" [attr.aria-current]="actif() === s.id ? 'true' : null">
+                <span class="regard" [class.regard-eteint]="actif() !== s.id" aria-hidden="true"></span>{{ s.titre }}
+              </button>
+            </li>
+          }
+        </ul>
+      </nav>
+
+      <div class="flex flex-col gap-24 lg:col-span-9">
+        @for (s of t.savoirFaire.items; track s.id; let i = $index) {
+          <article #bloc [id]="'sf-' + s.id" class="bloc-sf" [class.inverse]="i % 2 === 1">
+            <div class="visuel" appReveal>
+              @switch (s.id) {
+                @case ('animaux') {
+                  <div class="panneau-sf">
+                    <app-chat class="aspect-[3/2] overflow-hidden rounded-2xl" />
+                    <p class="mt-5 text-sm font-semibold text-neige">{{ t.savoirFaire.plume.titre }}</p>
+                    <ul class="mt-2">
+                      @for (l of t.savoirFaire.plume.lignes; track l.h) {
+                        <li class="flex gap-4 border-b filet py-2 text-sm"><span class="w-16 shrink-0 font-semibold text-givre">{{ l.h }}</span><span class="text-brume">{{ l.t }}</span></li>
+                      }
+                    </ul>
+                    <p class="alerte"><span class="regard" aria-hidden="true"></span>{{ t.savoirFaire.plume.alerte }}</p>
+                  </div>
+                }
+                @case ('maison') {
+                  <div>
+                    <p class="mb-3 text-sm font-semibold text-givre">{{ t.savoirFaire.scene.titre }}</p>
+                    <app-salon />
+                  </div>
+                }
+                @case ('demarches') {
+                  <div class="panneau-sf">
+                    <p class="flex items-center gap-2 text-sm font-semibold text-neige"><span class="regard" aria-hidden="true"></span>{{ t.savoirFaire.accord.titre }}</p>
+                    <p class="mt-4 text-brume">{{ t.savoirFaire.accord.ligne }}</p>
+                    <p class="mt-2 font-display text-[3rem] leading-none text-neige">{{ t.savoirFaire.accord.montant }}</p>
+                    <p class="mt-2 text-sm text-lac">{{ t.savoirFaire.accord.budget }}</p>
+                    <div class="mt-6 min-h-[3.25rem]" aria-live="polite">
+                      @switch (accord()) {
+                        @case ('attente') {
+                          <div class="flex flex-wrap gap-3">
+                            <button type="button" class="btn btn-primaire" (click)="repondre(true)">{{ t.savoirFaire.accord.ok }}</button>
+                            <button type="button" class="btn btn-secondaire" (click)="repondre(false)">{{ t.savoirFaire.accord.non }}</button>
+                          </div>
+                        }
+                        @case ('oui') {
+                          <p class="text-givre">Accepté. Le plombier passe demain à 9&nbsp;h, Dobby lui ouvrira.</p>
+                        }
+                        @default {
+                          <p class="text-givre">Refusé. Je cherche un autre artisan sous les 150&nbsp;€.</p>
+                        }
+                      }
+                    </div>
+                  </div>
+                }
+                @default {
+                  <app-lit-photo
+                    [name]="s.img"
+                    [alt]="s.alt"
+                    sizes="(min-width: 1024px) 40vw, 100vw"
+                    class="aspect-[4/3] rounded-[32px]"
+                    [position]="s.id === 'entretien' ? '50% 30%' : '62% 50%'"
+                  />
+                }
+              }
+            </div>
+            <div class="texte-sf" appReveal="1">
+              <h3 class="titre-carte">{{ s.titre }}</h3>
+              <p class="mt-4 text-[1.06rem] text-brume">{{ s.texte }}</p>
+            </div>
+          </article>
+        }
+        <div class="lg:pl-0" appReveal>
+          <a class="btn btn-primaire" routerLink="/devis" [queryParams]="{ source: 'dobby-savoirfaire' }">{{ t.savoirFaire.cta }}</a>
+          <p class="note mt-3">{{ t.savoirFaire.note }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Il apprend votre maison -->
+<app-apprend />
+
+<!-- 5. Plusieurs résidences -->
+<app-residences />
+
+<!-- 6. Fiche technique -->
+<app-fiche />
+
+<!-- 7. Finitions -->
+<app-finitions />
+
+<!-- 8. Appel -->
+<app-cta-block [cta]="t.appel.cta" [note]="t.appel.note" [params]="{ source: 'dobby-fin' }" />

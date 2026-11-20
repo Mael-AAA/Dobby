@@ -1,0 +1,190 @@
+.hero {
+  background: var(--color-encre);
+}
+
+/* Frise */
+.frise-section {
+  padding-block: 96px;
+  overflow: hidden;
+}
+@media (min-width: 1024px) {
+  .frise-section {
+    padding-block: 120px 80px;
+  }
+}
+.frise-cadre {
+  margin-top: 56px;
+}
+.piste {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+  padding-inline: 20px;
+}
+.date {
+  position: relative;
+  padding-left: 30px;
+  border-left: 1px solid rgb(157 193 207 / 0.25);
+}
+.point {
+  position: absolute;
+  left: -7px;
+  top: 10px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid var(--color-ardoise);
+  background: var(--color-nuit);
+  transition: all 500ms var(--ease-dobby);
+}
+.date.passee .point {
+  border-color: var(--color-givre);
+  background: var(--color-givre);
+  box-shadow: 0 0 12px rgb(184 226 242 / 0.7);
+}
+.annee {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 4vw, 3.6rem);
+  line-height: 1;
+  color: var(--color-ardoise);
+  transition: color 500ms var(--ease-dobby);
+}
+.date.passee .annee {
+  color: var(--color-neige);
+}
+@media (max-width: 1023px) {
+  .date .point {
+    border-color: var(--color-givre);
+    background: var(--color-givre);
+  }
+  .annee {
+    color: var(--color-neige);
+  }
+}
+@media (min-width: 1024px) {
+  .piste {
+    flex-direction: row;
+    gap: 0;
+    width: max-content;
+    padding-left: max(48px, calc((100vw - 1320px) / 2 + 48px));
+    padding-right: 30vw;
+  }
+  .date {
+    width: 400px;
+    padding: 46px 48px 0 0;
+    border-left: 0;
+    border-top: 1px solid rgb(157 193 207 / 0.25);
+  }
+  .point {
+    left: 0;
+    top: -7px;
+  }
+}
+
+/* Fondateurs */
+.fondateur {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.portrait {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 140px;
+  border-radius: 56px;
+  background: linear-gradient(160deg, var(--color-orage), var(--color-nuit));
+  border: 1px solid rgb(184 226 242 / 0.25);
+}
+.portrait span {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--color-givre);
+}
+
+/* Atelier : zoom très lent */
+.atelier-photo {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  border-radius: var(--radius-bloc);
+  overflow: hidden;
+}
+.atelier-photo img {
+  animation: zoom-lent 24s ease-in-out infinite alternate;
+}
+@keyframes zoom-lent {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+.crete {
+  display: block;
+  width: 100%;
+  height: 120px;
+  margin-top: 72px;
+}
+.crete path {
+  fill: none;
+  stroke: var(--color-givre);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0.6;
+  transition: stroke-dashoffset 3s var(--ease-dobby);
+}
+.crete.vue path {
+  stroke-dashoffset: 0;
+}
+
+/* Partenaires */
+.bandeau {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+.defile-partenaires {
+  display: flex;
+  width: max-content;
+  animation: defile 38s linear infinite;
+}
+.bandeau:hover .defile-partenaires {
+  animation-play-state: paused;
+}
+.partenaire {
+  width: 300px;
+  padding: 0 32px;
+  border-left: 1px solid rgb(157 193 207 / 0.16);
+}
+.marque {
+  display: block;
+  color: var(--color-neige);
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+.m0 {
+  font-weight: 800;
+  letter-spacing: 0.32em;
+}
+.m1 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+}
+.m2 {
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+}
+.m3 {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  letter-spacing: 0.06em;
+}
+.m4 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}

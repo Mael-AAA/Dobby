@@ -1,0 +1,115 @@
+<!-- 1. Hero : la note, les foyers, la satisfaction -->
+<section class="hero" aria-labelledby="temoignages-titre">
+  <div class="shell pt-40 pb-20 lg:pt-48">
+    <div class="grid gap-12 lg:grid-cols-12 lg:items-end">
+      <div class="lg:col-span-6">
+        <h1 id="temoignages-titre" class="titre-hero" appReveal>{{ t.hero.titre }}</h1>
+        <p class="intro mt-8" appReveal="1">{{ t.hero.texte }}</p>
+      </div>
+      <dl class="chiffres-hero lg:col-span-6" appReveal="2">
+        <div>
+          <dt class="sr-only">Note moyenne</dt>
+          <dd class="chiffre text-[clamp(2.4rem,3.6vw,3.4rem)] whitespace-nowrap">4,9<span class="text-[0.4em] text-lac">/5</span></dd>
+          <dd class="mt-2 text-sm text-brume">{{ t.hero.note }}</dd>
+        </div>
+        <div>
+          <dt class="sr-only">Foyers équipés</dt>
+          <dd class="chiffre text-[clamp(2.4rem,3.6vw,3.4rem)] whitespace-nowrap"><app-count [value]="n.foyers" [duration]="2000" /></dd>
+          <dd class="mt-2 text-sm text-brume">{{ t.hero.foyers }}</dd>
+        </div>
+        <div>
+          <dt class="sr-only">Clients satisfaits</dt>
+          <dd class="chiffre text-[clamp(2.4rem,3.6vw,3.4rem)] whitespace-nowrap"><app-count [value]="n.satisfaction" />&#8239;%</dd>
+          <dd class="mt-2 text-sm text-brume">{{ t.hero.satisfaction }}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- 2 et 3. Filtres et témoignages -->
+<section class="band pt-12" aria-labelledby="filtres-titre">
+  <div class="shell">
+    <h2 id="filtres-titre" class="text-sm font-semibold text-neige">{{ t.filtres.label }}</h2>
+    <div class="mt-4 flex flex-wrap gap-2" role="group" aria-labelledby="filtres-titre">
+      <button type="button" class="puce" [attr.aria-pressed]="filtre() === 'tous'" (click)="filtre.set('tous')">{{ t.filtres.tous }}</button>
+      @for (f of t.filtres.items; track f.id) {
+        <button type="button" class="puce" [attr.aria-pressed]="filtre() === f.id" (click)="filtrer(f.id)">{{ f.label }}</button>
+      }
+    </div>
+    <p class="sr-only" aria-live="polite">{{ cartes().length }} témoignage{{ cartes().length > 1 ? 's' : '' }} affiché{{ cartes().length > 1 ? 's' : '' }}</p>
+
+    <ul class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      @for (c of cartes(); track c.id; let i = $index) {
+        <li class="temoin" [style.--k]="i">
+          <p class="peur">
+            <span class="barre-peur">«&nbsp;{{ c.peur }}&nbsp;»</span>
+          </p>
+          <p class="mt-2 flex items-center gap-2 text-xs font-semibold text-givre">
+            <span class="regard" aria-hidden="true"></span>{{ t.peurLevee }}&nbsp;: {{ etiquette(c.id) }}
+          </p>
+          <blockquote class="mt-6 font-display text-[1.65rem] leading-snug text-neige">«&nbsp;{{ c.texte }}&nbsp;»</blockquote>
+          <p class="mt-8 flex items-center gap-4">
+            <span class="monogramme" aria-hidden="true">{{ c.initiales }}</span>
+            <span>
+              <span class="block font-semibold text-neige">{{ c.auteur }}</span>
+              <span class="block text-sm text-lac">{{ c.ville }}</span>
+            </span>
+          </p>
+        </li>
+      } @empty {
+        <li class="text-brume">{{ t.vide }}</li>
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- 4. Témoignage vidéo -->
+<app-film />
+
+<!-- 5. Ils en parlent -->
+<section class="band" aria-labelledby="medias-titre">
+  <div class="shell">
+    <h2 id="medias-titre" class="titre" appReveal>{{ t.medias.titre }}</h2>
+    <div class="mt-14 grid gap-12 lg:grid-cols-2">
+      @for (m of t.medias.items; track m.media; let i = $index) {
+        <figure class="media" [appReveal]="i">
+          <blockquote class="font-display text-[clamp(1.8rem,2.8vw,2.5rem)] leading-tight text-neige">«&nbsp;{{ m.citation }}&nbsp;»</blockquote>
+          <figcaption class="mt-6" [class]="i === 0 ? 'logo-media serif' : 'logo-media sans'">{{ m.media }}</figcaption>
+        </figure>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- 6. #MonDobby -->
+<section id="mon-dobby" class="band theme-encre overflow-hidden" aria-labelledby="mur-titre">
+  <div class="shell grid gap-6 lg:grid-cols-12 lg:items-end">
+    <div class="lg:col-span-6">
+      <h2 id="mur-titre" class="titre" appReveal>{{ t.mur.titre }}</h2>
+      <p class="intro mt-6" appReveal="1">{{ t.mur.texte }}</p>
+    </div>
+    <ul class="flex gap-2 lg:col-span-6 lg:justify-end" aria-label="Réseaux sociaux" appReveal="1">
+      @for (r of t.mur.reseaux; track r) {
+        <li><span class="reseau-nom">{{ r }}</span></li>
+      }
+    </ul>
+  </div>
+  <div class="shell mt-14">
+    <div class="mur">
+      @for (col of colonnes; track $index; let c = $index) {
+        <ul class="colonne" [class.inverse]="c === 1">
+          @for (p of col; track p.img) {
+            <li class="tuile">
+              <img [ngSrc]="p.img" ngSrcset="560w" sizes="(min-width: 1024px) 28vw, 33vw" width="560" height="560" alt="" />
+              <p class="legende">{{ p.legende }}</p>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- 7. Appel -->
+<app-cta-block [titre]="t.appel.titre" [texte]="t.appel.texte" [cta]="t.appel.cta" [note]="t.appel.note" [params]="{ source: 'temoignages' }" />

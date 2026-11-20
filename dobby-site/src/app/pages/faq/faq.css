@@ -1,0 +1,132 @@
+.hero {
+  background: var(--color-encre);
+}
+.recherche {
+  position: relative;
+  max-width: 560px;
+  color: var(--color-lac);
+}
+.recherche svg {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.recherche .champ {
+  padding-left: 50px;
+  border-radius: 999px;
+  min-height: 3.6rem;
+}
+.onglets {
+  position: sticky;
+  top: 110px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+@media (min-width: 1024px) {
+  .onglets {
+    flex-direction: column;
+  }
+}
+.onglets button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--color-brume);
+  text-align: left;
+  transition:
+    color 300ms var(--ease-dobby),
+    background 300ms;
+}
+.onglets button:hover {
+  color: var(--color-neige);
+}
+.onglets button[aria-selected='true'] {
+  color: var(--color-neige);
+  background: rgb(184 226 242 / 0.08);
+}
+.question {
+  border-bottom: 1px solid rgb(157 193 207 / 0.16);
+}
+.question:first-child {
+  border-top: 1px solid rgb(157 193 207 / 0.16);
+}
+.entete {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 22px 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-neige);
+}
+.entete:hover {
+  color: var(--color-givre);
+}
+.signe {
+  position: relative;
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+.signe::before,
+.signe::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 18px;
+  height: 1.6px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 400ms var(--ease-dobby);
+}
+.signe::after {
+  transform: rotate(90deg);
+}
+.ouverte .signe::after {
+  transform: rotate(0deg);
+}
+/* ouverture fluide : la grille passe de 0fr à 1fr */
+.reponse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 500ms var(--ease-dobby);
+}
+.ouverte .reponse {
+  grid-template-rows: 1fr;
+}
+.interieur {
+  overflow: hidden;
+}
+.interieur p {
+  max-width: 60ch;
+  padding-bottom: 24px;
+  color: var(--color-brume);
+  font-size: 1.05rem;
+}
+.question:not(.ouverte) .reponse {
+  visibility: hidden;
+  transition:
+    grid-template-rows 500ms var(--ease-dobby),
+    visibility 0s 500ms;
+}
+mark {
+  background: rgb(184 226 242 / 0.25);
+  color: var(--color-neige);
+  border-radius: 3px;
+  padding: 0 2px;
+}
+.vide {
+  padding: 28px;
+  border-radius: var(--radius-carte);
+  background: rgb(64 78 84 / 0.25);
+  color: var(--color-brume);
+}

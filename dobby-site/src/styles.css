@@ -1,0 +1,511 @@
+@import 'tailwindcss';
+
+/* Chiffres : dans Italiana, « 10 » se lit « IO ». Les chiffres seuls passent en Manrope très fine
+   (fichier manrope-latin-200-normal de Fontsource, copié dans public/fonts), le reste reste en Italiana. */
+@font-face {
+  font-family: 'Chiffres';
+  src: url('/fonts/chiffres.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+
+/*
+  Direction artistique « L'heure bleue », palette Couleur.png
+  givre #b8e2f2 · brume #9dc1cf · lac #7e9aa6 · ardoise #5f747d · orage #404e54
+  + deux ombres de la même teinte (nuit, encre) pour les fonds et une lumière (neige) pour les titres.
+  La lumière, c'est Dobby : son regard, la lampe qu'il allume, le bouton qui invite à entrer.
+  Le rouge « arret » est réservé au bouton d'arrêt d'urgence.
+*/
+@theme {
+  --color-givre: #b8e2f2;
+  --color-brume: #9dc1cf;
+  --color-lac: #7e9aa6;
+  --color-ardoise: #5f747d;
+  --color-orage: #404e54;
+  --color-nuit: #151d20;
+  --color-encre: #0d1316;
+  --color-neige: #e7f3f9;
+  --color-arret: #e5484d;
+
+  --font-display: 'Chiffres', 'Italiana', 'Didot', 'Bodoni 72', 'Times New Roman', serif;
+  --font-sans: 'Manrope Variable', 'Manrope', 'Segoe UI', system-ui, sans-serif;
+
+  --ease-dobby: cubic-bezier(0.22, 1, 0.36, 1);
+  --radius-carte: 20px;
+  --radius-bloc: 32px;
+}
+
+@property --lampe-r {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+@property --volet {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
+}
+
+@layer base {
+  html {
+    background: var(--color-nuit);
+    color: var(--color-brume);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--color-ardoise) var(--color-encre);
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background: var(--color-givre);
+    color: var(--color-nuit);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-givre);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-neige);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+  p,
+  li,
+  dd,
+  blockquote {
+    text-wrap: pretty;
+  }
+  img,
+  svg {
+    max-width: 100%;
+  }
+  button {
+    cursor: pointer;
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: max(20px, env(safe-area-inset-left, 0px));
+  }
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 48px;
+    }
+  }
+  .band {
+    padding-block: 96px;
+  }
+  @media (min-width: 1024px) {
+    .band {
+      padding-block: 160px;
+    }
+  }
+
+  /* Typographie */
+  .titre-hero {
+    font-family: var(--font-display);
+    font-size: clamp(3.1rem, 6.6vw, 6.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.012em;
+    color: var(--color-neige);
+  }
+  .titre {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4.6vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--color-neige);
+  }
+  .titre-carte {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 2.4vw, 2.5rem);
+    line-height: 1.08;
+    color: var(--color-neige);
+  }
+  .chiffre {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 7.4vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--color-neige);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .intro {
+    font-size: clamp(1.06rem, 1.3vw, 1.19rem);
+    line-height: 1.6;
+    color: var(--color-brume);
+    max-width: 38rem;
+  }
+  .etiquette {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-givre);
+  }
+  .note {
+    font-size: 0.875rem;
+    color: var(--color-lac);
+  }
+
+  /* Le regard : un œil seul, en puce ou en voyant */
+  .regard {
+    display: inline-block;
+    flex: none;
+    width: 0.42em;
+    height: 0.7em;
+    border-radius: 50%;
+    background: var(--color-givre);
+    box-shadow: 0 0 10px 1px rgb(184 226 242 / 0.55);
+    vertical-align: -0.04em;
+  }
+  .regard-eteint {
+    background: var(--color-ardoise);
+    box-shadow: none;
+  }
+
+  /* Boutons en pilule */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      background-color 300ms var(--ease-dobby),
+      color 300ms var(--ease-dobby),
+      border-color 300ms var(--ease-dobby),
+      box-shadow 300ms var(--ease-dobby),
+      transform 300ms var(--ease-dobby);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  /* La lueur : un reflet passe sur le bouton au survol */
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 800ms var(--ease-dobby);
+  }
+  .btn:hover::after {
+    transform: translateX(120%);
+  }
+  .btn-primaire {
+    background: var(--color-givre);
+    color: var(--color-nuit);
+  }
+  .btn-primaire:hover {
+    box-shadow: 0 0 34px 2px rgb(184 226 242 / 0.38);
+  }
+  .btn-secondaire {
+    border: 1px solid rgb(157 193 207 / 0.45);
+    color: var(--color-neige);
+  }
+  .btn-secondaire::after {
+    background: linear-gradient(105deg, transparent 30%, rgb(184 226 242 / 0.16) 50%, transparent 70%);
+  }
+  .btn-secondaire:hover {
+    border-color: var(--color-givre);
+  }
+  .btn-sombre {
+    background: var(--color-nuit);
+    color: var(--color-neige);
+  }
+  .btn-sombre::after {
+    background: linear-gradient(105deg, transparent 30%, rgb(184 226 242 / 0.25) 50%, transparent 70%);
+  }
+  .btn-sombre:hover {
+    box-shadow: 0 0 0 4px rgb(21 29 32 / 0.12);
+  }
+  .btn-petit {
+    min-height: 2.6rem;
+    padding: 0.55rem 1.15rem;
+    font-size: 0.92rem;
+  }
+
+  /* Lien de lecture : trait fin qui se courbe en sourire au survol */
+  .lien {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding-bottom: 6px;
+    font-weight: 600;
+    color: var(--color-neige);
+    text-decoration: none;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M1 2 Q50 9 99 2' fill='none' stroke='%23b8e2f2' stroke-width='1.5' vector-effect='non-scaling-stroke' stroke-linecap='round'/%3E%3C/svg%3E")
+        left bottom / 0% 8px no-repeat,
+      linear-gradient(rgb(157 193 207 / 0.4), rgb(157 193 207 / 0.4)) left calc(100% - 3px) / 100% 1px no-repeat;
+    transition:
+      background-size 500ms var(--ease-dobby),
+      color 300ms var(--ease-dobby);
+  }
+  .lien:hover {
+    color: var(--color-givre);
+    background-size:
+      100% 8px,
+      0% 1px;
+  }
+  .lien svg {
+    transition: transform 400ms var(--ease-dobby);
+  }
+  .lien:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Surfaces */
+  .carte {
+    background: rgb(64 78 84 / 0.28);
+    border: 1px solid rgb(157 193 207 / 0.14);
+    border-radius: var(--radius-carte);
+  }
+  .bloc {
+    border-radius: var(--radius-bloc);
+  }
+  .filet {
+    border-color: rgb(157 193 207 / 0.16);
+  }
+
+  /* Champs */
+  .champ {
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.8rem 1rem;
+    border-radius: 14px;
+    border: 1px solid rgb(157 193 207 / 0.35);
+    background: rgb(13 19 22 / 0.6);
+    color: var(--color-neige);
+    font-size: 1rem;
+    transition:
+      border-color 300ms var(--ease-dobby),
+      box-shadow 300ms var(--ease-dobby);
+  }
+  .champ::placeholder {
+    color: var(--color-lac);
+  }
+  .champ:focus {
+    outline: none;
+    border-color: var(--color-givre);
+    box-shadow: 0 0 0 3px rgb(184 226 242 / 0.18);
+  }
+  .champ[aria-invalid='true'] {
+    border-color: #f0a3a5;
+  }
+
+  /* Thème Givre : grands aplats lumineux (appel final, chiffres) */
+  .theme-givre {
+    background: var(--color-givre);
+    color: var(--color-orage);
+  }
+  .theme-givre :is(h1, h2, h3, .titre, .titre-hero, .titre-carte, .chiffre) {
+    color: var(--color-nuit);
+  }
+  .theme-givre .note,
+  .theme-givre .intro {
+    color: var(--color-orage);
+  }
+  .theme-givre :focus-visible {
+    outline-color: var(--color-nuit);
+  }
+  .theme-orage {
+    background: var(--color-orage);
+    color: var(--color-neige);
+  }
+  .theme-encre {
+    background: var(--color-encre);
+  }
+
+  /* Thème Jour : pages de lecture */
+  .theme-jour {
+    background: #eef6f9;
+    color: var(--color-orage);
+  }
+  .theme-jour :is(h1, h2, h3) {
+    color: var(--color-nuit);
+  }
+  .theme-jour :focus-visible {
+    outline-color: var(--color-nuit);
+  }
+}
+
+/* Apparition au défilement */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity 900ms var(--ease-dobby),
+    transform 900ms var(--ease-dobby);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Photo « heure bleue » : la lampe révèle les vraies couleurs */
+.lampe {
+  --lampe-x: 50%;
+  --lampe-y: 50%;
+  transition: --lampe-r 900ms var(--ease-dobby);
+}
+.lampe-jour {
+  -webkit-mask-image: radial-gradient(
+    circle at var(--lampe-x) var(--lampe-y),
+    #000 calc(var(--lampe-r) * 0.38),
+    rgb(0 0 0 / 0.55) calc(var(--lampe-r) * 0.7),
+    transparent var(--lampe-r)
+  );
+  mask-image: radial-gradient(
+    circle at var(--lampe-x) var(--lampe-y),
+    #000 calc(var(--lampe-r) * 0.38),
+    rgb(0 0 0 / 0.55) calc(var(--lampe-r) * 0.7),
+    transparent var(--lampe-r)
+  );
+}
+
+/* Grain photographique très léger */
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Clignement des yeux */
+@keyframes cligne {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  45%,
+  55% {
+    transform: scaleY(0.08);
+  }
+}
+.oeil {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.cligne .oeil {
+  animation: cligne 260ms ease-in-out;
+}
+
+/* Halo qui respire autour d'un bouton */
+@keyframes respire {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+/* Défilement d'un bandeau (partenaires) */
+@keyframes defile {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Arrêt d'urgence : tout se fige, sauf l'écran d'arrêt */
+html.is-stopped body *:not(.stop-overlay):not(.stop-overlay *),
+html.is-stopped body *:not(.stop-overlay):not(.stop-overlay *)::before,
+html.is-stopped body *:not(.stop-overlay):not(.stop-overlay *)::after {
+  animation-play-state: paused !important;
+  transition-duration: 0s !important;
+}
+
+/* Transition de page : la nouvelle page s'ouvre comme des volets */
+::view-transition-old(root) {
+  animation: 520ms var(--ease-dobby) both vt-sortie;
+}
+::view-transition-new(root) {
+  animation: 1000ms var(--ease-dobby) both vt-volets;
+  -webkit-mask-image: repeating-linear-gradient(to bottom, #000 0, #000 var(--volet), transparent var(--volet), transparent 8.3334%);
+  mask-image: repeating-linear-gradient(to bottom, #000 0, #000 var(--volet), transparent var(--volet), transparent 8.3334%);
+}
+@keyframes vt-volets {
+  from {
+    --volet: 0%;
+  }
+  to {
+    --volet: 8.34%;
+  }
+}
+@keyframes vt-sortie {
+  to {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    transform: none;
+    transition: opacity 400ms linear;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+}

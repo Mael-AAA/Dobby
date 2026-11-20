@@ -1,0 +1,202 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-encre);
+}
+.halo {
+  position: absolute;
+  right: 6%;
+  top: 22%;
+  width: 640px;
+  height: 640px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(184 226 242 / 0.22), transparent);
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 1400ms var(--ease-dobby),
+    transform 1400ms var(--ease-dobby);
+  pointer-events: none;
+}
+.halo.on {
+  opacity: 1;
+  transform: none;
+}
+.accueil-appli {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding: 8px 16px 18px;
+  font-size: 13px;
+}
+.carte-etat {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgb(64 78 84 / 0.7);
+}
+.batterie {
+  position: relative;
+  width: 46px;
+  height: 7px;
+  border-radius: 4px;
+  background: rgb(157 193 207 / 0.25);
+  overflow: hidden;
+}
+.batterie i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--color-givre);
+}
+.raccourci {
+  padding: 10px 8px;
+  border-radius: 12px;
+  background: rgb(64 78 84 / 0.45);
+}
+.arret-tel {
+  margin-top: auto;
+  display: block;
+  padding: 12px;
+  border-radius: 999px;
+  background: #c7353a;
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Contrôle */
+.fonction {
+  padding: 24px;
+  border-radius: var(--radius-carte);
+  background: rgb(64 78 84 / 0.25);
+  border: 1px solid rgb(157 193 207 / 0.14);
+  transition:
+    transform 400ms var(--ease-dobby),
+    border-color 400ms,
+    background 400ms;
+}
+.fonction:hover {
+  transform: scale(1.03);
+  border-color: var(--color-givre);
+  background: rgb(64 78 84 / 0.4);
+}
+.mini {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 92px;
+}
+.mini svg {
+  width: 120px;
+}
+.m-p {
+  fill: none;
+  stroke: var(--color-brume);
+  stroke-width: 2;
+}
+.m-priv {
+  fill: #0b1012;
+  stroke: var(--color-ardoise);
+}
+.mini-arret {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f07e81, var(--color-arret) 55%, #a82f33);
+  box-shadow: 0 0 0 6px rgb(229 72 77 / 0.15);
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgb(184 226 242 / 0.45);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-givre);
+}
+.avatar.petit {
+  width: 36px;
+  height: 36px;
+  align-self: end;
+  font-size: 1rem;
+}
+.btn-arret {
+  min-height: 44px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  background: #c7353a;
+  color: #fff;
+  font-weight: 700;
+  transition: transform 200ms var(--ease-dobby);
+}
+.btn-arret:hover {
+  transform: scale(1.03);
+}
+
+/* Résidences */
+.rail {
+  display: flex;
+  gap: 32px;
+  margin-top: 56px;
+  padding: 10px max(20px, calc(50vw - 150px));
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.diapo {
+  flex: none;
+  scroll-snap-align: center;
+  opacity: 0.45;
+  transform: scale(0.92);
+  transition:
+    opacity 500ms var(--ease-dobby),
+    transform 500ms var(--ease-dobby);
+}
+.diapo.actif {
+  opacity: 1;
+  transform: none;
+}
+.rond {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgb(157 193 207 / 0.3);
+  color: var(--color-neige);
+}
+.rond:hover {
+  border-color: var(--color-givre);
+}
+.point-nav {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-brume);
+}
+.point-nav[aria-pressed='true'] {
+  color: var(--color-nuit);
+  background: var(--color-givre);
+}
+
+/* Badges des magasins d'applications, non cliquables */
+.badge-store {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid rgb(157 193 207 / 0.35);
+  background: #000;
+  color: var(--color-neige);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: not-allowed;
+}

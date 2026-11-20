@@ -1,0 +1,113 @@
+<section id="soiree" class="soiree" [class.epinglee]="pinned()" aria-labelledby="soiree-titre">
+  <div #pin class="pin">
+    <div class="ciel" aria-hidden="true" [style.--nuit]="nuit()"></div>
+
+    <div class="shell cadre">
+      <div class="gauche">
+        <h2 id="soiree-titre" class="titre">{{ t.titre }}</h2>
+
+        @if (pinned()) {
+          <p class="horloge" aria-hidden="true">
+            @for (d of chiffres(); track $index; let i = $index) {
+              <span class="roue">
+                <span class="bande" [style.transform]="'translateY(' + -d + 'em)'">
+                  @for (n of digits; track n) {
+                    <span>{{ n }}</span>
+                  }
+                </span>
+              </span>
+              @if (i === 1) {
+                <span class="sep">h</span>
+              }
+            }
+          </p>
+        }
+
+        <ol class="etapes">
+          @for (e of t.etapes; track e.heure; let i = $index) {
+            <li class="etape" [class.active]="!pinned() || i === step()" [class.passee]="pinned() && i < step()">
+              <button type="button" class="repere" (click)="aller(i)" [disabled]="!pinned()" [attr.aria-current]="pinned() && i === step() ? 'step' : null">
+                <span class="regard" [class.regard-eteint]="pinned() && i !== step()" aria-hidden="true"></span>
+                <span class="heure">{{ e.heure }}</span>
+                <span class="lieu">{{ e.lieu }}</span>
+              </button>
+              <p class="texte">{{ e.texte }}</p>
+
+              <div class="visuel" [class.visible]="!pinned() || i === step()">
+                @switch (i) {
+                  @case (0) {
+                    <div class="train" aria-hidden="true">
+                      <div class="lumieres">
+                        @for (l of [1, 2, 3, 4, 5, 6]; track l) {
+                          <i [style.--l]="l"></i>
+                        }
+                      </div>
+                      <app-phone [width]="250" heure="17:52" class="telephone">
+                        <div class="appli">
+                          <p class="appli-titre"><span class="regard"></span> Dobby</p>
+                          <div class="bulle moi">
+                            <span class="onde">
+                              @for (b of [3, 6, 9, 5, 11, 7, 4, 8, 10, 6, 3, 7, 5, 9, 4]; track $index) {
+                                <i [style.height.px]="b * 2" [style.--k]="$index"></i>
+                              }
+                            </span>
+                            <span class="duree">{{ e.message }}</span>
+                          </div>
+                          <p class="transcrit">{{ e.texte }}</p>
+                          <div class="bulle lui">C'est noté. Je m'occupe de samedi.</div>
+                        </div>
+                      </app-phone>
+                    </div>
+                  }
+                  @case (1) {
+                    <app-lit-photo
+                      name="vaisselle"
+                      alt="Dobby range la vaisselle dans une grande cuisine claire."
+                      sizes="(min-width: 1024px) 56vw, 100vw"
+                      position="62% 50%"
+                      [lit]="pinned() ? step() >= 1 : undefined"
+                      [autoLight]="!pinned()"
+                      class="photo"
+                    >
+                      <ul class="liste">
+                        @for (l of e.liste ?? []; track l; let k = $index) {
+                          <li [style.--k]="k">
+                            <app-coche [size]="20" [done]="!pinned() || step() >= 1" class="text-givre" />{{ l }}
+                          </li>
+                        }
+                      </ul>
+                    </app-lit-photo>
+                  }
+                  @case (2) {
+                    <app-lit-photo
+                      name="linge2"
+                      alt="Dobby plie un tee-shirt sur un grand lit, dans une chambre aux tons beiges."
+                      sizes="(min-width: 1024px) 56vw, 100vw"
+                      position="60% 50%"
+                      [lit]="pinned() ? step() >= 2 : undefined"
+                      [autoLight]="!pinned()"
+                      class="photo"
+                    >
+                      <ul class="liste">
+                        @for (l of e.liste ?? []; track l; let k = $index) {
+                          <li [style.--k]="k">
+                            <app-coche [size]="20" [done]="!pinned() || step() >= 2" class="text-givre" />{{ l }}
+                          </li>
+                        }
+                      </ul>
+                    </app-lit-photo>
+                  }
+                  @default {
+                    <app-facade [lit]="!pinned() || step() >= 3" class="photo" />
+                  }
+                }
+              </div>
+            </li>
+          }
+        </ol>
+
+        <p class="fin" [class.visible]="!pinned() || fin()">{{ t.fin }}</p>
+      </div>
+    </div>
+  </div>
+</section>
