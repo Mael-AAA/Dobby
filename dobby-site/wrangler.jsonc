@@ -1,0 +1,16 @@
+// Déploiement sur Cloudflare Workers (fichiers statiques uniquement, pas de code serveur).
+// Réglages du Worker « dobby » (Paramètres > Build) :
+//   Répertoire racine : dobby-site
+//   Commande de build : npm run build
+//   Commande de déploiement : npx wrangler deploy
+{
+  // doit être identique au nom du Worker dans le tableau de bord Cloudflare
+  "name": "dobby",
+  "compatibility_date": "2026-11-20",
+  "assets": {
+    // dossier produit par « npm run build »
+    "directory": "./dist/dobby-site/browser",
+    // site Angular à une seule page : /securite, /devis… renvoient index.html, le routeur Angular fait le reste
+    "not_found_handling": "single-page-application"
+  }
+}
