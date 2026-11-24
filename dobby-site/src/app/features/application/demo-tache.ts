@@ -12,20 +12,22 @@ import {
 import { RouterLink } from '@angular/router';
 import { APPLICATION } from '../../content/application';
 import { DobbyState } from '../../core/dobby-state.service';
+import { fr } from '../../core/fr';
 import { SoundService } from '../../core/sound.service';
-import { Coche } from '../../ui/icons';
 import { Phone } from '../../ui/phone';
 import { Reveal, onceVisible } from '../../ui/reveal.directive';
 
-type Etape = 'vide' | 'saisie' | 'envoye' | 'confirme' | 'fait';
+/** 0 : écran Messages au repos ; 1 : demande envoyée, Dobby écrit ; 2 : Dobby confirme ; 3 : c'est fait, photo à l'appui */
+type Temps = 0 | 1 | 2 | 3;
 
 /**
- * « Un oubli ? Deux secondes suffisent. » : la démonstration se joue dans le téléphone.
- * Le raccourci s'écrit, part, Dobby confirme, exécute, puis la photo arrive.
+ * « Un oubli ? Deux secondes suffisent. » : la démonstration se joue dans le téléphone, avec de vraies captures
+ * de l'application (scripts/captures-appli.mjs). Un raccourci touché fait passer ses trois captures :
+ * la demande part, Dobby confirme, puis la photo arrive quand c'est fait.
  */
 @Component({
   selector: 'app-demo-tache',
-  imports: [NgOptimizedImage, RouterLink, Phone, Coche, Reveal],
+  imports: [NgOptimizedImage, RouterLink, Phone, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
@@ -47,37 +49,27 @@ type Etape = 'vide' | 'saisie' | 'envoye' | 'confirme' | 'fait';
         </div>
 
         <div class="flex justify-center lg:col-span-6 lg:col-start-7" appReveal="1">
-          <app-phone [width]="310" heure="18:44" class="relative">
-            <div class="ecran">
-              <p class="entete"><span class="regard" aria-hidden="true"></span> Dobby <span class="ml-auto text-xs font-normal text-lac">Paris 16e</span></p>
-              <div class="fil" aria-live="polite">
-                @if (etape() !== 'vide' && etape() !== 'saisie') {
-                  <p class="bulle moi">{{ r().label }}</p>
+          <app-phone [width]="310" [plein]="true" class="relative">
+            <img ngSrc="appli-messages" ngSrcset="390w, 780w" sizes="310px" fill [alt]="t.ecran" class="object-cover" />
+            <!-- les captures d'un raccourci se chargent la première fois qu'il est joué, puis restent prêtes -->
+            @for (r of t.raccourcis; track r.id; let i = $index) {
+              @if (joues().includes(i)) {
+                @for (k of [1, 2, 3]; track k) {
+                  <img
+                    [ngSrc]="'appli-' + r.id + '-' + k"
+                    ngSrcset="390w, 780w"
+                    sizes="310px"
+                    fill
+                    alt=""
+                    class="capture object-cover"
+                    [class.vue]="i === choix() && k <= temps()"
+                  />
                 }
-                @if (etape() === 'confirme' || etape() === 'fait') {
-                  <p class="bulle lui">{{ r().confirme }}</p>
-                }
-                @if (etape() === 'confirme') {
-                  <p class="en-cours"><span class="points" aria-hidden="true"><i></i><i></i><i></i></span> En cours</p>
-                }
-                @if (etape() === 'fait') {
-                  <div class="bulle lui photo">
-                    <div class="relative aspect-[3/2] overflow-hidden rounded-xl">
-                      <img [ngSrc]="r().photo" [ngSrcset]="r().photo === 'linge' ? '600w' : '900w'" sizes="260px" fill alt="" class="object-cover" />
-                    </div>
-                    <p class="mt-2 flex items-center gap-2"><app-coche [size]="18" class="text-givre" />{{ r().fait }}</p>
-                    <p class="mt-1 text-[11px] text-lac">{{ r().legende }}</p>
-                  </div>
-                }
-              </div>
-              <div class="saisie">
-                <span class="champ-tel" [class.actif]="etape() === 'saisie'">{{ tape() || t.champ }}</span>
-                <span class="envoyer" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </span>
-              </div>
-            </div>
+              }
+            }
           </app-phone>
+          <!-- ce que montrent les captures, pour les lecteurs d'écran -->
+          <p class="sr-only" aria-live="polite">{{ annonce() }}</p>
         </div>
       </div>
     </section>
@@ -100,125 +92,43 @@ type Etape = 'vide' | 'saisie' | 'envoye' | 'confirme' | 'fait';
       border-color: var(--color-givre);
       color: var(--color-nuit);
     }
-    .ecran {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      padding: 6px 14px 16px;
-      font-size: 13px;
+    /*
+      les captures s'empilent sur l'écran Messages au repos ; chaque étape apparaît en un fondu bref,
+      comme l'écran qui se met à jour (plus long, on verrait deux étapes l'une sur l'autre)
+    */
+    .capture {
+      opacity: 0;
+      transition: opacity 160ms ease-out;
     }
-    .entete {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgb(157 193 207 / 0.15);
-      font-weight: 700;
+    .capture.vue {
+      opacity: 1;
     }
-    .fil {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      gap: 8px;
-      padding: 12px 0;
-      overflow: hidden;
-    }
-    .bulle {
-      max-width: 86%;
-      padding: 9px 12px;
-      border-radius: 16px;
-      line-height: 1.4;
-      animation: arrive 500ms var(--ease-dobby) both;
-    }
-    .moi {
-      align-self: flex-end;
-      background: var(--color-givre);
-      color: var(--color-nuit);
-      font-weight: 600;
-      border-bottom-right-radius: 4px;
-    }
-    .lui {
-      align-self: flex-start;
-      background: var(--color-orage);
-      border-bottom-left-radius: 4px;
-    }
-    .photo {
-      padding: 8px;
-      width: 86%;
-    }
-    .en-cours {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--color-lac);
-      font-size: 12px;
-    }
-    .points {
-      display: inline-flex;
-      gap: 3px;
-    }
-    .points i {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--color-givre);
-      animation: saute 1s ease-in-out infinite;
-    }
-    .points i:nth-child(2) {
-      animation-delay: 0.15s;
-    }
-    .points i:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-    @keyframes saute {
-      50% {
-        opacity: 0.3;
-        transform: translateY(-3px);
+    @media (prefers-reduced-motion: reduce) {
+      .capture {
+        transition: none;
       }
-    }
-    @keyframes arrive {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-    }
-    .saisie {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .champ-tel {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgb(157 193 207 / 0.25);
-      color: var(--color-lac);
-      white-space: nowrap;
-      overflow: hidden;
-    }
-    .champ-tel.actif {
-      color: var(--color-neige);
-      border-color: var(--color-givre);
-    }
-    .envoyer {
-      display: grid;
-      place-items: center;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: var(--color-givre);
-      color: var(--color-nuit);
     }
   `,
 })
 export class DemoTache {
   protected readonly t = APPLICATION.confier;
   protected readonly choix = signal(0);
-  protected readonly etape = signal<Etape>('vide');
-  protected readonly tape = signal('');
-  protected readonly r = computed(() => this.t.raccourcis[this.choix()]);
+  protected readonly temps = signal<Temps>(0);
+  /** raccourcis déjà joués : leurs captures sont dans la page */
+  protected readonly joues = signal<number[]>([]);
+  protected readonly annonce = computed(() => {
+    const r = this.t.raccourcis[this.choix()];
+    switch (this.temps()) {
+      case 1:
+        return fr(`${this.t.vous} : ${r.label}`);
+      case 2:
+        return fr(`${this.t.dobby} : ${r.confirme}`);
+      case 3:
+        return fr(`${this.t.dobby} : ${r.fait} ${this.t.photo} : ${r.legende}.`);
+      default:
+        return '';
+    }
+  });
   private readonly state = inject(DobbyState);
   private readonly sound = inject(SoundService);
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -233,40 +143,27 @@ export class DemoTache {
     destroy.onDestroy(() => this.timers.forEach(clearTimeout));
   }
 
+  /** Même rythme que dans l'appli : Dobby confirme au bout d'une seconde, la photo arrive ensuite */
   protected jouer(i: number) {
     this.timers.forEach(clearTimeout);
     this.timers = [];
     this.choix.set(i);
+    if (!this.joues().includes(i)) this.joues.update((j) => [...j, i]);
     this.sound.tick();
     const r = this.t.raccourcis[i];
     if (this.state.reducedMotion()) {
-      this.tape.set('');
-      this.etape.set('fait');
+      this.temps.set(3);
       return;
     }
     const at = (ms: number, fn: () => void) => this.timers.push(window.setTimeout(fn, ms));
-    this.etape.set('saisie');
-    this.tape.set('');
-    let n = 0;
-    const ecrire = () => {
-      n++;
-      this.tape.set(r.label.slice(0, n));
-      if (n < r.label.length) at(55, ecrire);
-      else
-        at(350, () => {
-          this.tape.set('');
-          this.etape.set('envoye');
-          this.sound.tick();
-          at(800, () => {
-            this.etape.set('confirme');
-            this.sound.say(r.confirme);
-            at(2200, () => {
-              this.etape.set('fait');
-              this.sound.tick();
-            });
-          });
-        });
-    };
-    ecrire();
+    this.temps.set(1);
+    at(900, () => {
+      this.temps.set(2);
+      this.sound.say(r.confirme);
+      at(2400, () => {
+        this.temps.set(3);
+        this.sound.tick();
+      });
+    });
   }
 }

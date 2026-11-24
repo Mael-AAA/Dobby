@@ -7,8 +7,8 @@ import { Coche, Fleche } from '../../ui/icons';
 import { Reveal } from '../../ui/reveal.directive';
 
 /**
- * « Une phrase suffit » : cinq cartes, chacune montre une petite scène de la maison
- * (le menu, le linge, la photo de Plume, le thermostat, la demande d'accord) plutôt qu'une icône.
+ * « Une phrase suffit » : cinq cartes, chacune montre une petite scène de la maison plutôt qu'une icône
+ * (Dobby qui dresse la table, Dobby qui passe l'aspirateur, la photo de Plume, le thermostat, la demande d'accord).
  */
 @Component({
   selector: 'app-savoir-faire',
@@ -22,8 +22,8 @@ export class SavoirFaire {
   protected readonly t = ACCUEIL.savoirFaire;
   protected readonly c = this.t.cartes;
   protected readonly obj = {
-    cuisine: this.c[0].objet as { entete: string; lignes: string[]; note: string },
-    entretien: this.c[1].objet as { entete: string; lignes: string[] },
+    cuisine: this.c[0].objet as { alt: string },
+    entretien: this.c[1].objet as { alt: string },
     animaux: this.c[2].objet as { entete: string; heure: string; note: string; alt: string },
     maison: this.c[3].objet as { entete: string; temperature: string; lignes: string[] },
     demarches: this.c[4].objet as {

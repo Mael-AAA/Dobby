@@ -21,10 +21,16 @@ export const LARGEURS: Record<string, number[]> = {
   comite: [700, 1000, 1400],
   porte: [1200, 1492],
   salon: [700, 1200, 1672],
+  // Dobby aux fourneaux (soirée de l'accueil), Dobby dresse la table et passe l'aspirateur (cartes de l'accueil)
+  fourneaux: [1200, 1672],
+  table: [600, 1100],
+  aspirateur: [600, 1100],
 };
 
 export function largeurs(nom: string): number[] {
   const base = nom.replace(/-nuit$/, '');
+  // captures de la vraie application (scripts/captures-appli.mjs) : écran de 390 points, simple et double densité
+  if (base.startsWith('appli-')) return [390, 780];
   return LARGEURS[base] ?? [560];
 }
 

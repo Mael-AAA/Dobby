@@ -37,7 +37,8 @@ export const ACCUEIL = deepFr({
         minutes: 17 * 60 + 52,
         lieu: 'Dans le train',
         texte: '« Dobby, nous serons six samedi. Claire ne mange pas de viande. »',
-        message: 'Message vocal, 0:06',
+        // photo : public/img/fourneaux-*.webp
+        alt: 'Dobby fait sauter des légumes à la poêle, dans une cuisine baignée de soleil.',
       },
       {
         heure: '18 h 10',
@@ -74,20 +75,17 @@ export const ACCUEIL = deepFr({
         id: 'cuisine',
         titre: 'Cuisine',
         texte: 'Du petit-déjeuner au dîner de douze couverts, selon les goûts de chacun.',
+        // photo : public/img/table-*.webp
         objet: {
-          entete: 'Samedi soir, six couverts',
-          lignes: ['Velouté de potimarron', 'Risotto aux cèpes', 'Tarte fine aux poires'],
-          note: 'Claire : sans viande. Léo : sans noisettes.',
+          alt: 'Dobby dresse la grande table de la salle à manger : il pose une assiette, les verres et les serviettes sont déjà en place.',
         },
       },
       {
         id: 'entretien',
         titre: 'Entretien',
         texte: 'Ménage, linge, rangement, au rythme de votre maison.',
-        objet: {
-          entete: 'Linge de la semaine',
-          lignes: ['Chemises repassées', 'Draps changés mardi', 'Pull en cachemire lavé à la main, séché à plat'],
-        },
+        // photo : public/img/aspirateur-*.webp
+        objet: { alt: 'Dobby passe l’aspirateur sur le parquet du salon, près du canapé.' },
       },
       {
         id: 'animaux',

@@ -1,7 +1,7 @@
 // Prépare les images du site à partir du dossier ../Image
 // - retouche : marques et filigranes masqués (clonage du tissu voisin)
 // - deux versions par photo : « jour » (couleurs réelles) et « nuit » (dégradé de la palette Couleur.png),
-//   sauf la photo de Plume, que Dobby envoie : elle n'existe qu'en vraies couleurs
+//   sauf la photo de Plume, que Dobby envoie, et celles des cartes Cuisine et Entretien : vraies couleurs seulement
 // - trois finitions du robot détouré : nacre, obsidienne, cuivre (et le buste cuivre du haut de l'accueil)
 // Lancer : node scripts/images.mjs (les portraits des fondateurs : node scripts/portraits.mjs)
 import sharp from 'sharp';
@@ -311,6 +311,25 @@ await both(porte, 'porte', [1200, 1492]);
 
 // 11. Un client présente Dobby dans son salon (accueil, tuile « 3 200 foyers »)
 await both(src('Dobby salon.png'), 'salon', [700, 1200, 1672]);
+
+// 12. Dobby aux fourneaux (accueil, 17 h 52 de la soirée)
+// (pas de petite largeur : le cadre est presque carré, la photo s'y affiche bien plus large que lui)
+await both(src('Dobby fourneaux.png'), 'fourneaux', [1200, 1672]);
+
+// 13 et 14. Cartes Cuisine et Entretien de « Une phrase suffit » (accueil) : photos en vraies couleurs, comme Plume
+// Le cadre fait 300 px de haut : la photo s'y affiche sur environ 530 px de large.
+// Petites marques effacées : sur la tête (table), sur les deux chaussures (aspirateur).
+const table = await retouch(src('Dobby table.png'), {
+  inpaints: [{ x: 718, y: 110, w: 18, h: 24, win: 11, delta: 35, grow: 1 }],
+});
+await save(table, 'table', [600, 1100]);
+const aspirateur = await retouch(src('Dobby aspirateur.png'), {
+  inpaints: [
+    { x: 533, y: 764, w: 16, h: 15, win: 9, delta: 25, grow: 1 },
+    { x: 642, y: 811, w: 15, h: 11, win: 9, delta: 25, grow: 1 },
+  ],
+});
+await save(aspirateur, 'aspirateur', [600, 1100]);
 
 console.log('Images prêtes dans public/img');
 

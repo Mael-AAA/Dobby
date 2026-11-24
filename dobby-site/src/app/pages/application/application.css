@@ -22,47 +22,6 @@
   opacity: 1;
   transform: none;
 }
-.accueil-appli {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  height: 100%;
-  padding: 8px 16px 18px;
-  font-size: 13px;
-}
-.carte-etat {
-  padding: 14px;
-  border-radius: 18px;
-  background: rgb(64 78 84 / 0.7);
-}
-.batterie {
-  position: relative;
-  width: 46px;
-  height: 7px;
-  border-radius: 4px;
-  background: rgb(157 193 207 / 0.25);
-  overflow: hidden;
-}
-.batterie i {
-  position: absolute;
-  inset: 0 auto 0 0;
-  background: var(--color-givre);
-}
-.raccourci {
-  padding: 10px 8px;
-  border-radius: 12px;
-  background: rgb(64 78 84 / 0.45);
-}
-.arret-tel {
-  margin-top: auto;
-  display: block;
-  padding: 12px;
-  border-radius: 999px;
-  background: #c7353a;
-  color: #fff;
-  font-weight: 700;
-  text-align: center;
-}
 
 /* Contrôle */
 .fonction {

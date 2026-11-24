@@ -36,28 +36,18 @@
               <div class="visuel" [class.visible]="!pinned() || i === step()">
                 @switch (i) {
                   @case (0) {
-                    <div class="train" aria-hidden="true">
-                      <div class="lumieres">
-                        @for (l of [1, 2, 3, 4, 5, 6]; track l) {
-                          <i [style.--l]="l"></i>
-                        }
-                      </div>
-                      <app-phone [width]="250" heure="17:52" class="telephone">
-                        <div class="appli">
-                          <p class="appli-titre"><span class="regard"></span> Dobby</p>
-                          <div class="bulle moi">
-                            <span class="onde">
-                              @for (b of [3, 6, 9, 5, 11, 7, 4, 8, 10, 6, 3, 7, 5, 9, 4]; track $index) {
-                                <i [style.height.px]="b * 2" [style.--k]="$index"></i>
-                              }
-                            </span>
-                            <span class="duree">{{ e.message }}</span>
-                          </div>
-                          <p class="transcrit">{{ e.texte }}</p>
-                          <div class="bulle lui">C'est noté. Je m'occupe de samedi.</div>
-                        </div>
-                      </app-phone>
-                    </div>
+                    <!-- vous êtes encore dans le train, Dobby est déjà aux fourneaux : la lumière part de son visage -->
+                    <!-- (section épinglée : la photo s'allume dès que le récit commence à défiler) -->
+                    <app-lit-photo
+                      name="fourneaux"
+                      [alt]="e.alt ?? ''"
+                      sizes="(min-width: 1024px) 135vh, 135vw"
+                      position="52% 50%"
+                      origine="65% 16%"
+                      [lit]="pinned() ? progress() > 0 : undefined"
+                      [autoLight]="!pinned()"
+                      class="photo"
+                    />
                   }
                   @case (1) {
                     <app-lit-photo

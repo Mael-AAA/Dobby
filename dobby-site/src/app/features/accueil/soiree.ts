@@ -16,7 +16,6 @@ import { ScrollService } from '../../core/scroll.service';
 import { DobbyFace } from '../../ui/dobby-face';
 import { Coche } from '../../ui/icons';
 import { LitPhoto } from '../../ui/lit-photo';
-import { Phone } from '../../ui/phone';
 
 /** Position de chaque étape dans le défilement de la section épinglée */
 const REPERES = [0.03, 0.29, 0.55, 0.8];
@@ -28,7 +27,7 @@ const REPERES = [0.03, 0.29, 0.55, 0.8];
  */
 @Component({
   selector: 'app-soiree',
-  imports: [LitPhoto, Phone, Coche, DobbyFace],
+  imports: [LitPhoto, Coche, DobbyFace],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   templateUrl: './soiree.html',

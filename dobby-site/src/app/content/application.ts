@@ -4,45 +4,49 @@ import { deepFr } from '../core/fr';
 // Retouche de style : « Tout est visible. Rien n'est caché. » devient « Rien ne se fait dans votre dos. »
 // (deux phrases qui disaient la même chose).
 // Ajouts : scénarios des trois raccourcis, journal d'activité, écrans des trois résidences.
+// Les téléphones de la page montrent de vraies captures de l'application (scripts/captures-appli.mjs) :
+// les textes des raccourcis reprennent mot pour mot ce que Dobby y écrit, ils servent aux lecteurs d'écran.
 export const APPLICATION = deepFr({
   hero: {
     titre: 'Votre maison tient dans votre main.',
     texte:
       "L'application Dobby vous permet de lui confier une tâche, de savoir ce qu'il fait et de l'arrêter, où que vous soyez.",
+    capture:
+      "L'accueil de l'application Dobby, à Paris 16e : « Dobby range la bibliothèque. Le reste est en ordre. » En dessous, la température, la batterie et les raccourcis pour lui confier une tâche.",
   },
   confier: {
     titre: 'Un oubli ? Deux secondes suffisent.',
     texte:
       'Écrivez ou dictez votre demande, ou choisissez un raccourci : « Nourrir Plume », « Lancer une lessive », « Préparer le dîner ». Dobby confirme, exécute, puis vous envoie une photo quand c’est fait.',
     consigne: 'Touchez un raccourci',
+    // l'écran Messages avant tout échange (capture appli-messages), puis chaque raccourci en trois captures
+    ecran: "L'écran Messages de l'application Dobby : il vous attend, avec ses raccourcis au-dessus du champ « Écrire à Dobby ».",
+    vous: 'Vous',
+    dobby: 'Dobby',
+    photo: 'Photo envoyée',
     raccourcis: [
       {
         id: 'plume',
         label: 'Nourrir Plume',
         confirme: "C'est noté, j'y vais.",
-        fait: "C'est fait. Plume a mangé à 18 h 45.",
-        photo: 'plume',
-        legende: 'Plume, 18 h 45',
+        fait: "C'est fait. Plume a mangé à 18 h 44.",
+        legende: 'Plume, 18 h 44',
       },
       {
         id: 'lessive',
         label: 'Lancer une lessive',
         confirme: 'Draps de la chambre des enfants, programme 40 °C.',
-        fait: 'Lessive lancée. Fin prévue à 20 h 10, je l’étendrai.',
-        photo: 'linge',
-        legende: 'Buanderie, 18 h 52',
+        fait: "Lessive lancée. Fin prévue à 19 h 59, je l'étendrai.",
+        legende: 'Chambre des enfants, 18 h 44',
       },
       {
         id: 'diner',
         label: 'Préparer le dîner',
-        confirme: 'Velouté et risotto pour quatre, prêts à 20 h.',
+        confirme: 'Velouté et risotto pour quatre, sans noisettes pour Léo. Prêts à 19 h 30.',
         fait: 'Le dîner est prêt. Table dressée pour quatre.',
-        photo: 'vaisselle',
-        legende: 'Cuisine, 19 h 58',
+        legende: 'Salle à manger, 18 h 44',
       },
     ],
-    champ: 'Écrire à Dobby',
-    envoyer: 'Envoyer',
     cta: "Voir l'application en démonstration",
     note: 'Présentée par votre Conseiller.',
   },
@@ -72,10 +76,23 @@ export const APPLICATION = deepFr({
   residences: {
     titre: 'Paris, Megève, Cap-Ferret. Une seule application.',
     texte: "Passez d'une maison à l'autre d'un glissement. Demandez à Dobby de préparer le chalet avant votre arrivée.",
+    // id : nom de la capture (public/img/appli-paris-*.webp…)
     ecrans: [
-      { id: 'paris', nom: 'Paris 16e', temp: '21 °C', etat: 'Dobby range la bibliothèque', tache: 'Dîner à 20 h', batterie: 82 },
-      { id: 'megeve', nom: 'Megève', temp: '19 °C', etat: 'Chalet préparé pour vendredi', tache: 'Cheminée prête', batterie: 100 },
-      { id: 'capferret', nom: 'Cap-Ferret', temp: '17 °C', etat: 'En veille, volets fermés', tache: 'Arrosage à 6 h', batterie: 64 },
+      {
+        id: 'paris',
+        nom: 'Paris 16e',
+        alt: "L'accueil de l'application pour l'appartement de Paris 16e : Dobby range la bibliothèque, il fait 21 °C, batterie à 82 %.",
+      },
+      {
+        id: 'megeve',
+        nom: 'Megève',
+        alt: "L'accueil de l'application pour le chalet de Megève : en veille jusqu'à votre arrivée, il fait 17 °C, batterie à 100 %.",
+      },
+      {
+        id: 'capferret',
+        nom: 'Cap-Ferret',
+        alt: "L'accueil de l'application pour la villa du Cap-Ferret : en veille, volets fermés, il fait 18 °C, batterie à 64 %.",
+      },
     ],
     precedent: 'Résidence précédente',
     suivant: 'Résidence suivante',
@@ -84,10 +101,10 @@ export const APPLICATION = deepFr({
     titre: 'Remise en main propre.',
     texte:
       "L'application est réservée aux foyers équipés. Elle vous est remise et configurée par votre Conseiller le jour de l'installation.",
-    // les badges mènent à la page d'accueil de chaque magasin d'applications
+    // les deux badges ouvrent la version en ligne de l'application Dobby
     badges: [
-      { label: "Télécharger dans l'App Store", url: 'https://www.apple.com/fr/app-store/' },
-      { label: 'Disponible sur Google Play', url: 'https://play.google.com/store' },
+      { label: "Télécharger dans l'App Store", url: 'https://dobby-app.baudet.workers.dev/' },
+      { label: 'Disponible sur Google Play', url: 'https://dobby-app.baudet.workers.dev/' },
     ],
     nouvelOnglet: '(nouvel onglet)',
   },

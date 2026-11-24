@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,7 +20,7 @@ import { Reveal } from '../../ui/reveal.directive';
 
 @Component({
   selector: 'app-application',
-  imports: [Reveal, Phone, Fleche, CtaBlock, DemoTache, Journal],
+  imports: [NgOptimizedImage, Reveal, Phone, Fleche, CtaBlock, DemoTache, Journal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '(window:scroll)': 'onScroll()' },
   templateUrl: './application.html',
