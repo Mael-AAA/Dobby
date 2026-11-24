@@ -1,3 +1,13 @@
+/* Rectangle aux coins arrondis sur fond encre, comme le pied de page (layout/footer.ts) */
+.section-chiffres {
+  display: block;
+  padding: var(--marge-encart);
+  background: var(--color-encre);
+}
+.cadre-chiffres {
+  border-radius: var(--radius-bloc);
+}
+
 .tuile {
   display: flex;
   flex-direction: column;

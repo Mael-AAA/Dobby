@@ -1,85 +1,88 @@
-<section class="theme-orage band" aria-labelledby="chiffres-titre">
-  <div class="shell">
-    <h2 id="chiffres-titre" class="titre max-w-[16ch]" appReveal>{{ t.titre }}</h2>
+<!-- Comme le pied de page : la section tient dans un rectangle orage aux coins arrondis, posé sur le fond encre -->
+<section class="section-chiffres" aria-labelledby="chiffres-titre">
+  <div class="cadre-chiffres theme-orage band">
+    <div class="shell">
+      <h2 id="chiffres-titre" class="titre max-w-[16ch]" appReveal>{{ t.titre }}</h2>
 
-    <div class="mt-16 grid gap-x-10 gap-y-16 lg:grid-cols-2">
-      <!-- 3 200 foyers : un salon équipé, la photo s'allume pendant que le compteur monte -->
-      <!-- photo calée en haut (50% 0%) : le visage suit avec align="xMidYMin" -->
-      <figure class="tuile" appReveal>
-        <app-lit-photo
-          name="salon"
-          [alt]="t.foyers.alt"
-          sizes="(min-width: 1024px) 42vw, 92vw"
-          position="50% 0%"
-          origine="76% 30%"
-          [lit]="foyerAllume()"
-          class="photo-foyer rounded-2xl"
-        >
-          <app-dobby-face [vw]="1672" [vh]="941" [cx]="1275" [cy]="165" [s]="0.15" [angle]="-4" align="xMidYMin" [lit]="foyerAllume()" />
-        </app-lit-photo>
-        <figcaption class="legende">
-          <span class="chiffre"><app-count [value]="n.foyers" [duration]="2600" (progress)="allumer($event)" /></span>
-          <span>
-            <span class="label">{{ t.foyers.label }}</span>
-            <span class="detail">{{ t.foyers.detail }}</span>
-          </span>
-        </figcaption>
-      </figure>
+      <div class="mt-16 grid gap-x-10 gap-y-16 lg:grid-cols-2">
+        <!-- 3 200 foyers : un salon équipé, la photo s'allume pendant que le compteur monte -->
+        <!-- photo calée en haut (50% 0%) : le visage suit avec align="xMidYMin" -->
+        <figure class="tuile" appReveal>
+          <app-lit-photo
+            name="salon"
+            [alt]="t.foyers.alt"
+            sizes="(min-width: 1024px) 42vw, 92vw"
+            position="50% 0%"
+            origine="76% 30%"
+            [lit]="foyerAllume()"
+            class="photo-foyer rounded-2xl"
+          >
+            <app-dobby-face [vw]="1672" [vh]="941" [cx]="1275" [cy]="165" [s]="0.15" [angle]="-4" align="xMidYMin" [lit]="foyerAllume()" />
+          </app-lit-photo>
+          <figcaption class="legende">
+            <span class="chiffre"><app-count [value]="n.foyers" [duration]="2600" (progress)="allumer($event)" /></span>
+            <span>
+              <span class="label">{{ t.foyers.label }}</span>
+              <span class="detail">{{ t.foyers.detail }}</span>
+            </span>
+          </figcaption>
+        </figure>
 
-      <!-- 19 h sur 168 -->
-      <figure class="tuile" appReveal="1">
-        <div #grille class="semaine" [class.vu]="vu()" aria-hidden="true">
-          @for (j of jours; track $index; let ji = $index) {
-            <span class="jour">{{ j }}</span>
-            @for (h of heures; track h) {
-              <span class="case" [class.rendue]="rendue(ji, h)" [style.--k]="ji * 3 + (h % 12)"></span>
+        <!-- 19 h sur 168 -->
+        <figure class="tuile" appReveal="1">
+          <div #grille class="semaine" [class.vu]="vu()" aria-hidden="true">
+            @for (j of jours; track $index; let ji = $index) {
+              <span class="jour">{{ j }}</span>
+              @for (h of heures; track h) {
+                <span class="case" [class.rendue]="rendue(ji, h)" [style.--k]="ji * 3 + (h % 12)"></span>
+              }
             }
-          }
-          <span></span>
-          @for (h of [0, 6, 12, 18]; track h) {
-            <span class="graduation" [style.grid-column]="h + 2 + ' / span 6'">{{ h }}&nbsp;h</span>
-          }
-        </div>
-        <figcaption class="legende">
-          <span class="chiffre"><app-count [value]="n.heures" [duration]="1600" /></span>
-          <span>
-            <span class="label">{{ t.heures.label }}</span>
-            <span class="detail">{{ t.heures.detail }}</span>
-          </span>
-        </figcaption>
-      </figure>
+            <span></span>
+            @for (h of [0, 6, 12, 18]; track h) {
+              <span class="graduation" [style.grid-column]="h + 2 + ' / span 6'">{{ h }}&nbsp;h</span>
+            }
+          </div>
+          <figcaption class="legende">
+            <span class="chiffre"><app-count [value]="n.heures" [duration]="1600" /></span>
+            <span>
+              <span class="label">{{ t.heures.label }}</span>
+              <span class="detail">{{ t.heures.detail }}</span>
+            </span>
+          </figcaption>
+        </figure>
 
-      <!-- 98 % : cent regards, deux éteints -->
-      <figure class="tuile" appReveal>
-        <div class="regards" [class.vu]="vu()" aria-hidden="true">
-          @for (r of regards; track r.i) {
-            <span [class.eteint]="r.i === 37 || r.i === 81" [style.--k]="r.k"></span>
-          }
-        </div>
-        <figcaption class="legende">
-          <span class="chiffre"><app-count [value]="n.satisfaction" [duration]="1800" /><span class="unite">&#8239;%</span></span>
-          <span>
-            <span class="label">{{ t.satisfaction.label }}</span>
-            <span class="detail">{{ t.satisfaction.detail }}</span>
-          </span>
-        </figcaption>
-      </figure>
+        <!-- 98 % : cent regards, deux éteints -->
+        <figure class="tuile" appReveal>
+          <div class="regards" [class.vu]="vu()" aria-hidden="true">
+            @for (r of regards; track r.i) {
+              <span [class.eteint]="r.i === 37 || r.i === 81" [style.--k]="r.k"></span>
+            }
+          </div>
+          <figcaption class="legende">
+            <span class="chiffre"><app-count [value]="n.satisfaction" [duration]="1800" /><span class="unite">&#8239;%</span></span>
+            <span>
+              <span class="label">{{ t.satisfaction.label }}</span>
+              <span class="detail">{{ t.satisfaction.detail }}</span>
+            </span>
+          </figcaption>
+        </figure>
 
-      <!-- 0 incident -->
-      <figure class="tuile" appReveal="1">
-        <div class="zero" aria-hidden="true">
-          <svg viewBox="0 0 60 100">
-            <ellipse cx="30" cy="50" rx="21" ry="35" />
-          </svg>
-        </div>
-        <figcaption class="legende">
-          <span class="chiffre">0</span>
-          <span>
-            <span class="label">{{ t.incidents.label }}</span>
-            <span class="detail">{{ t.incidents.detail }}</span>
-          </span>
-        </figcaption>
-      </figure>
+        <!-- 0 incident -->
+        <figure class="tuile" appReveal="1">
+          <div class="zero" aria-hidden="true">
+            <svg viewBox="0 0 60 100">
+              <ellipse cx="30" cy="50" rx="21" ry="35" />
+            </svg>
+          </div>
+          <figcaption class="legende">
+            <span class="chiffre">0</span>
+            <span>
+              <span class="label">{{ t.incidents.label }}</span>
+              <span class="detail">{{ t.incidents.detail }}</span>
+            </span>
+          </figcaption>
+        </figure>
+      </div>
     </div>
   </div>
 </section>
