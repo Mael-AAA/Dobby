@@ -18,16 +18,18 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1600 / 2600;
-  filter: drop-shadow(0 0 40px rgb(184 226 242 / 0.08));
+  filter: drop-shadow(0 0 40px rgb(211 154 108 / 0.1));
 }
-.robot-nuit {
+.robot-cuivre {
   filter: brightness(0.32);
   transition: filter 2400ms var(--ease-dobby) 300ms;
 }
-.go .robot-nuit {
+.go .robot-cuivre {
   filter: brightness(1);
 }
+/* reflet qui passe une fois sur le cuivre */
 .balayage {
+  filter: brightness(1.55) saturate(1.08);
   opacity: 0;
   -webkit-mask-image: linear-gradient(100deg, transparent 38%, #000 50%, transparent 62%);
   mask-image: linear-gradient(100deg, transparent 38%, #000 50%, transparent 62%);
@@ -217,23 +219,134 @@
   }
 }
 
-/* Repère du bouton d'arrêt sur la nuque */
-.cible {
+/*
+  Zone cliquable posée sur le vrai bouton de la photo (module clair en haut de la nuque).
+  Sur l'image nuque (1300 × 1078), le module occupe x 505 à 578 et y 35 à 245 ; dans le cadre 4/5
+  rempli en « cover » avec object-position 45 % 50 %, cela donne x 35,7 à 44,2 % et y 3,2 à 22,7 %.
+  La zone déborde un peu pour rester facile à viser.
+*/
+.bouton-nuque {
   position: absolute;
   z-index: 2;
-  width: 26px;
-  height: 26px;
-  margin: -13px 0 0 -13px;
-  border-radius: 50%;
-  border: 2px solid var(--color-givre);
-  box-shadow: 0 0 14px rgb(184 226 242 / 0.8);
+  left: 34.5%;
+  top: 2%;
+  width: 11%;
+  height: 22.5%;
+  border-radius: 999px;
+  transition: box-shadow 400ms var(--ease-dobby);
 }
-.cible i {
+/* au survol de la souris, le contour du vrai bouton s'éclaire (pas sur écran tactile, où le survol reste collé) */
+@media (hover: hover) {
+  .bouton-nuque:hover {
+    box-shadow:
+      0 0 0 2px rgb(184 226 242 / 0.75),
+      0 0 28px 6px rgb(184 226 242 / 0.55);
+  }
+}
+/* deux ondes partent du bouton, l'une après l'autre, comme un appel ; elles s'arrêtent une fois le bouton essayé */
+.bouton-nuque::before,
+.bouton-nuque::after {
+  content: '';
   position: absolute;
-  inset: -10px;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid rgb(184 226 242 / 0.7);
+  pointer-events: none;
+  animation: onde-nuque 2.8s var(--ease-dobby) infinite;
+}
+.bouton-nuque::after {
+  animation-delay: 1.4s;
+}
+.decouvert::before,
+.decouvert::after {
+  content: none;
+}
+@keyframes onde-nuque {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+/* avant-goût de la lumière : au survol (ou au clavier), une lueur s'ouvre autour du bouton */
+.lueur-nuque {
+  position: absolute;
+  z-index: 1;
+  left: 40%;
+  top: 13%;
+  width: 52%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  scale: 0.6;
   border-radius: 50%;
-  border: 1px solid var(--color-givre);
-  animation: onde-arret 2.6s var(--ease-dobby) infinite;
+  background: radial-gradient(circle, rgb(231 243 249 / 0.42), rgb(184 226 242 / 0.16) 45%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.6s var(--ease-dobby);
+}
+@media (hover: hover) {
+  .bouton-nuque:hover ~ .lueur-nuque {
+    opacity: 1;
+    scale: 1;
+  }
+}
+.bouton-nuque:focus-visible ~ .lueur-nuque {
+  opacity: 1;
+  scale: 1;
+}
+/* photo allumée : la lueur n'a plus de raison d'être */
+.bouton-nuque[aria-pressed='true'] ~ .lueur-nuque {
+  opacity: 0;
+}
+
+/*
+  Étiquette « Appuyez ici » à gauche du bouton (qui commence à 34,5 % de la photo), flèche vers lui.
+  La place à gauche du bouton dépend de la largeur de la photo : la taille du texte (et tout le reste, en em)
+  suit cette largeur (unités cqw), de 0,82rem sur ordinateur à 0,62rem sur les plus petits téléphones.
+*/
+.photo-nuque {
+  container-type: inline-size;
+}
+.invite-nuque {
+  position: absolute;
+  z-index: 2;
+  right: calc(65.5% + 10px);
+  top: 9%;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 0.7em 0.5em 1em;
+  border-radius: 999px;
+  background: rgb(13 19 22 / 0.85);
+  color: var(--color-neige);
+  font-size: clamp(0.62rem, 4.2cqw - 2px, 0.82rem);
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: invite-nuque 1.6s var(--ease-dobby) infinite;
+}
+.invite-nuque::after {
+  content: '';
+  border-block: 0.4em solid transparent;
+  border-left: 0.55em solid var(--color-givre);
+}
+@keyframes invite-nuque {
+  50% {
+    translate: 5px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bouton-nuque::before,
+  .bouton-nuque::after,
+  .invite-nuque {
+    animation: none;
+  }
 }
 .cible-mini {
   width: 12px;

@@ -186,7 +186,7 @@
   background: var(--color-givre);
 }
 
-/* Badges des magasins d'applications, non cliquables */
+/* Badges des magasins d'applications : liens vers l'App Store et Google Play */
 .badge-store {
   display: inline-flex;
   align-items: center;
@@ -198,5 +198,12 @@
   color: var(--color-neige);
   font-size: 0.9rem;
   font-weight: 600;
-  cursor: not-allowed;
+  text-decoration: none;
+  transition:
+    border-color 300ms var(--ease-dobby),
+    transform 300ms var(--ease-dobby);
+}
+.badge-store:hover {
+  border-color: var(--color-givre);
+  transform: translateY(-2px);
 }

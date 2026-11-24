@@ -29,23 +29,25 @@ let uid = 0;
           <feMerge><feMergeNode in="b" /><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
       </defs>
-      <g [attr.filter]="'url(#' + fid + ')'">
-        <g #eyes>
-          <g class="yeux">
-            <ellipse class="oeil" [attr.cx]="cx() - 70 * s()" [attr.cy]="cy()" [attr.rx]="24 * s()" [attr.ry]="40 * s()" />
-            <ellipse class="oeil" [attr.cx]="cx() + 70 * s()" [attr.cy]="cy()" [attr.rx]="24 * s()" [attr.ry]="40 * s()" />
+      <g [attr.transform]="pivot()">
+        <g [attr.filter]="'url(#' + fid + ')'">
+          <g #eyes>
+            <g class="yeux">
+              <ellipse class="oeil" [attr.cx]="cx() - 70 * s()" [attr.cy]="cy()" [attr.rx]="24 * s()" [attr.ry]="40 * s()" />
+              <ellipse class="oeil" [attr.cx]="cx() + 70 * s()" [attr.cy]="cy()" [attr.rx]="24 * s()" [attr.ry]="40 * s()" />
+            </g>
           </g>
+          <path class="sourire" pathLength="1" [attr.d]="smile()" [attr.stroke-width]="13 * s()" />
         </g>
-        <path class="sourire" pathLength="1" [attr.d]="smile()" [attr.stroke-width]="13 * s()" />
+        <rect
+          class="volet"
+          [attr.x]="cx() - 130 * s()"
+          [attr.y]="cy() - 74 * s()"
+          [attr.width]="260 * s()"
+          [attr.height]="150 * s()"
+          [attr.rx]="20 * s()"
+        />
       </g>
-      <rect
-        class="volet"
-        [attr.x]="cx() - 130 * s()"
-        [attr.y]="cy() - 74 * s()"
-        [attr.width]="260 * s()"
-        [attr.height]="150 * s()"
-        [attr.rx]="20 * s()"
-      />
     </svg>
   `,
   styles: `
@@ -86,12 +88,15 @@ export class DobbyFace {
   readonly cx = input(1150);
   readonly cy = input(548);
   readonly s = input(1);
+  /** Inclinaison du visage en degrés autour de (cx, cy), pour suivre une tête penchée (négatif : vers la gauche) */
+  readonly angle = input(0);
   readonly lit = input(true);
   readonly align = input('xMidYMid');
   readonly fit = input<'slice' | 'meet'>('slice');
 
   protected readonly state = inject(DobbyState);
   protected readonly fid = `lueur-${uid++}`;
+  protected readonly pivot = computed(() => (this.angle() ? `rotate(${this.angle()} ${this.cx()} ${this.cy()})` : null));
   protected readonly smile = computed(() => {
     const s = this.s();
     const x = this.cx();

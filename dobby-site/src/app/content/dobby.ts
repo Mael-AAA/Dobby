@@ -10,6 +10,7 @@ export const DOBBY = deepFr({
     texte: '1,70 m, une voix posée, des gestes mesurés. Dobby a été dessiné pour se fondre dans les plus belles maisons.',
     cta: 'Configurer mon Dobby',
     note: 'Deux minutes, sans engagement.',
+    alt: 'Dobby en pied, de face, en finition cuivre : visière sombre, silhouette fine.',
     reperes: [
       { valeur: '1,70 m', detail: 'une seule taille' },
       { valeur: 'Moins de 35 dB', detail: "plus silencieux qu'une bibliothèque" },
@@ -98,6 +99,8 @@ export const DOBBY = deepFr({
     note: 'Votre Conseiller adapte Dobby à votre maison.',
     plume: {
       titre: 'Journal de Plume',
+      // photo : public/img/plume-*.webp, préparée par scripts/images.mjs
+      alt: 'Plume, le chat tigré, mange dans sa gamelle.',
       lignes: [
         { h: '7 h 30', t: 'Croquettes, 40 g' },
         { h: '12 h 00', t: 'Eau changée' },
@@ -144,6 +147,7 @@ export const DOBBY = deepFr({
   fiche: {
     titre: 'La fiche technique.',
     texte: 'Survolez ou touchez les repères pour voir ce que cache son revêtement.',
+    alt: 'Dobby en pied, de face, en finition cuivre, visière sombre.',
     reperes: [
       { id: 'visiere', label: 'Visière', texte: 'Caméras et micros, avec un volet que vous fermez d’un geste.', x: 22, y: 7 },
       { id: 'nuque', label: 'Nuque', texte: 'Le bouton d’arrêt, à l’arrière, indépendant du logiciel.', x: 27, y: 24 },

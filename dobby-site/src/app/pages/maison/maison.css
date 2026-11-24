@@ -2,6 +2,72 @@
   background: var(--color-encre);
 }
 
+/* Bandes à flèches (frise et partenaires) : titre à gauche, flèches à droite */
+.entete-bande {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.fleches {
+  display: flex;
+  gap: 12px;
+}
+.rond {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgb(157 193 207 / 0.3);
+  color: var(--color-neige);
+  transition:
+    border-color 300ms var(--ease-dobby),
+    opacity 300ms var(--ease-dobby);
+}
+.rond:hover {
+  border-color: var(--color-givre);
+}
+.rond[aria-disabled='true'] {
+  opacity: 0.35;
+  cursor: default;
+}
+.rond[aria-disabled='true']:hover {
+  border-color: rgb(157 193 207 / 0.3);
+}
+/* La bande défile à l'horizontale, alignée sur la grille du site ; un fondu signale ce qu'il reste à voir */
+.bande {
+  --marge: max(20px, calc((100vw - 1320px) / 2 + 20px));
+  --fondu-g: 56px;
+  --fondu-d: 56px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--marge);
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fondu-g), #000 calc(100% - var(--fondu-d)), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--fondu-g), #000 calc(100% - var(--fondu-d)), transparent 100%);
+}
+.bande::-webkit-scrollbar {
+  display: none;
+}
+.bande.au-debut {
+  --fondu-g: 0px;
+}
+.bande.a-la-fin {
+  --fondu-d: 0px;
+}
+/* le contour de focus passe à l'intérieur, pour ne pas être masqué */
+.bande:focus-visible {
+  outline-offset: -3px;
+}
+@media (min-width: 768px) {
+  .bande {
+    --marge: max(48px, calc((100vw - 1320px) / 2 + 48px));
+  }
+}
+
 /* Frise */
 .frise-section {
   padding-block: 96px;
@@ -9,7 +75,7 @@
 }
 @media (min-width: 1024px) {
   .frise-section {
-    padding-block: 120px 80px;
+    padding-block: 120px;
   }
 }
 .frise-cadre {
@@ -17,19 +83,20 @@
 }
 .piste {
   display: flex;
-  flex-direction: column;
-  gap: 44px;
-  padding-inline: 20px;
+  width: max-content;
+  padding-inline: var(--marge);
 }
 .date {
   position: relative;
-  padding-left: 30px;
-  border-left: 1px solid rgb(157 193 207 / 0.25);
+  width: min(78vw, 400px);
+  padding: 46px 40px 0 0;
+  border-top: 1px solid rgb(157 193 207 / 0.25);
+  scroll-snap-align: start;
 }
 .point {
   position: absolute;
-  left: -7px;
-  top: 10px;
+  left: 0;
+  top: -7px;
   width: 13px;
   height: 13px;
   border-radius: 50%;
@@ -37,6 +104,7 @@
   background: var(--color-nuit);
   transition: all 500ms var(--ease-dobby);
 }
+/* une date s'allume quand elle arrive à l'écran */
 .date.passee .point {
   border-color: var(--color-givre);
   background: var(--color-givre);
@@ -52,55 +120,58 @@
 .date.passee .annee {
   color: var(--color-neige);
 }
-@media (max-width: 1023px) {
-  .date .point {
-    border-color: var(--color-givre);
-    background: var(--color-givre);
-  }
-  .annee {
-    color: var(--color-neige);
-  }
-}
-@media (min-width: 1024px) {
-  .piste {
-    flex-direction: row;
-    gap: 0;
-    width: max-content;
-    padding-left: max(48px, calc((100vw - 1320px) / 2 + 48px));
-    padding-right: 30vw;
-  }
-  .date {
-    width: 400px;
-    padding: 46px 48px 0 0;
-    border-left: 0;
-    border-top: 1px solid rgb(157 193 207 / 0.25);
-  }
-  .point {
-    left: 0;
-    top: -7px;
-  }
-}
 
-/* Fondateurs */
-.fondateur {
+/* Fondateurs : portraits détourés posés sur un fond clair de la palette, comme en studio */
+.fondateurs {
+  margin-top: 56px;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
+  gap: 72px;
+}
+.fondateur {
+  max-width: 440px;
 }
 .portrait {
-  display: grid;
-  place-items: center;
-  width: 112px;
-  height: 140px;
-  border-radius: 56px;
-  background: linear-gradient(160deg, var(--color-orage), var(--color-nuit));
-  border: 1px solid rgb(184 226 242 / 0.25);
+  position: relative;
+  aspect-ratio: 5 / 8;
+  border-radius: var(--radius-bloc);
+  overflow: hidden;
+  background:
+    radial-gradient(55% 34% at 50% 24%, rgb(255 255 255 / 0.6), transparent 72%),
+    linear-gradient(170deg, var(--color-neige) 0%, var(--color-givre) 55%, var(--color-brume) 100%);
 }
-.portrait span {
-  font-family: var(--font-display);
-  font-size: 2.2rem;
-  color: var(--color-givre);
+.texte-fondateur {
+  margin-top: 32px;
+}
+/* tablette : les deux portraits côte à côte, le texte dessous */
+@media (min-width: 768px) {
+  .fondateurs {
+    grid-template-columns: repeat(2, minmax(0, 440px));
+    column-gap: clamp(40px, 7vw, 120px);
+  }
+}
+/* ordinateur : une ligne par fondateur, portrait et citation alternés de part et d'autre */
+@media (min-width: 1024px) {
+  .fondateurs {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 120px;
+  }
+  .fondateur {
+    max-width: none;
+    display: grid;
+    grid-template-columns: 440px minmax(0, 1fr);
+    column-gap: clamp(56px, 8vw, 128px);
+    align-items: center;
+  }
+  .fondateur:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr) 440px;
+  }
+  .fondateur:nth-child(even) .portrait {
+    order: 2;
+  }
+  .texte-fondateur {
+    margin-top: 0;
+    max-width: 34rem;
+  }
 }
 
 /* Atelier : zoom très lent */
@@ -141,23 +212,22 @@
   stroke-dashoffset: 0;
 }
 
-/* Partenaires */
-.bandeau {
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
-}
-.defile-partenaires {
+/* Partenaires : même bande à flèches que la frise */
+.piste-partenaires {
   display: flex;
   width: max-content;
-  animation: defile 38s linear infinite;
-}
-.bandeau:hover .defile-partenaires {
-  animation-play-state: paused;
+  padding-inline: var(--marge);
 }
 .partenaire {
-  width: 300px;
+  width: min(75vw, 300px);
   padding: 0 32px;
   border-left: 1px solid rgb(157 193 207 / 0.16);
+  scroll-snap-align: start;
+}
+/* le premier nom s'aligne sur le titre */
+.partenaire:first-child {
+  padding-left: 0;
+  border-left: 0;
 }
 .marque {
   display: block;

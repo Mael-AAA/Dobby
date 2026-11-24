@@ -4,6 +4,7 @@ import { Provider } from '@angular/core';
 /** Largeurs disponibles pour chaque image générée par scripts/images.mjs */
 export const LARGEURS: Record<string, number[]> = {
   'dobby-buste': [700, 1200],
+  'dobby-buste-cuivre': [700, 1200],
   'dobby-pied': [560, 960],
   'finition-nacre': [560, 960],
   'finition-obsidienne': [560, 960],
@@ -12,6 +13,14 @@ export const LARGEURS: Record<string, number[]> = {
   linge: [600, 1066],
   linge2: [800, 1672],
   vaisselle: [900, 1842],
+  // portraits des fondateurs, préparés par scripts/portraits.mjs
+  'fondateur-mael': [360, 540],
+  'fondateur-theddy': [360, 540],
+  // Plume, le chat (photo envoyée par Dobby, sans version nuit), le comité d'éthique, Dobby à la porte
+  plume: [600, 900],
+  comite: [700, 1000, 1400],
+  porte: [1200, 1492],
+  salon: [700, 1200, 1672],
 };
 
 export function largeurs(nom: string): number[] {

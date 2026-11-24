@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ACCUEIL } from '../../content/accueil';
@@ -6,10 +7,16 @@ import { DobbyState } from '../../core/dobby-state.service';
 import { Fleche } from '../../ui/icons';
 import { Reveal } from '../../ui/reveal.directive';
 
-/** Trois témoignages, carrousel lent. Pause au survol, au focus, ou avec le bouton dédié. */
+/** Nombre de photos de la galerie #MonDobby montrées en aperçu sur l'accueil */
+const APERCU = 6;
+
+/**
+ * Trois témoignages, carrousel lent. Pause au survol, au focus, ou avec le bouton dédié.
+ * À gauche : la note en étoiles et un aperçu de la galerie #MonDobby (page Témoignages).
+ */
 @Component({
   selector: 'app-temoins',
-  imports: [RouterLink, Reveal, Fleche],
+  imports: [NgOptimizedImage, RouterLink, Reveal, Fleche],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
@@ -20,7 +27,7 @@ import { Reveal } from '../../ui/reveal.directive';
           <div class="mt-8 flex items-center gap-3">
             <span class="note-chiffre font-display text-[3.4rem] leading-none text-neige">4,9</span>
             <span class="flex flex-col gap-1">
-              <span class="flex gap-1.5" aria-hidden="true">
+              <span class="flex gap-1" aria-hidden="true">
                 @for (i of [0, 1, 2, 3, 4]; track i) {
                   <span class="etoile" [style.--f]="i < 4 ? 1 : 0.9"></span>
                 }
@@ -28,7 +35,21 @@ import { Reveal } from '../../ui/reveal.directive';
               <span class="text-sm text-brume">{{ t.note }}</span>
             </span>
           </div>
-          <a routerLink="/temoignages" fragment="mon-dobby" class="lien mt-8">{{ t.lien }} <app-fleche /></a>
+          <!--
+            Aperçu de la galerie : les vignettes mènent aussi à la galerie, à la souris.
+            Au clavier et pour les lecteurs d'écran, c'est le lien texte juste en dessous qui compte (pas de doublon).
+          -->
+          <a routerLink="/temoignages" fragment="mon-dobby" class="apercu mt-10" tabindex="-1" aria-hidden="true">
+            @for (p of apercu; track p.img; let dernier = $last) {
+              <span class="vignette">
+                <img [ngSrc]="p.img" ngSrcset="560w" sizes="120px" fill alt="" />
+                @if (dernier && reste > 0) {
+                  <span class="plus">+{{ reste }}</span>
+                }
+              </span>
+            }
+          </a>
+          <a routerLink="/temoignages" fragment="mon-dobby" class="lien mt-6">{{ t.lien }} <app-fleche /></a>
         </div>
 
         <div
@@ -52,7 +73,6 @@ import { Reveal } from '../../ui/reveal.directive';
                 aria-roledescription="diapositive"
                 [attr.aria-label]="i + 1 + ' sur ' + cartes.length"
               >
-                <p class="peur"><span class="regard"></span> {{ peurLevee }}&nbsp;: «&nbsp;{{ c.peur }}&nbsp;»</p>
                 <blockquote class="citation">«&nbsp;{{ c.texte }}&nbsp;»</blockquote>
                 <p class="mt-8 flex items-center gap-4">
                   <span class="monogramme" aria-hidden="true">{{ c.initiales }}</span>
@@ -110,16 +130,7 @@ import { Reveal } from '../../ui/reveal.directive';
         transform 900ms var(--ease-dobby) 200ms,
         visibility 0s;
     }
-    .peur {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--color-givre);
-    }
     .citation {
-      margin-top: 22px;
       font-family: var(--font-display);
       font-size: clamp(1.9rem, 3.3vw, 3rem);
       line-height: 1.18;
@@ -136,11 +147,49 @@ import { Reveal } from '../../ui/reveal.directive';
       font-size: 1.15rem;
       color: var(--color-givre);
     }
+    /*
+      Étoiles jaunes à la façon des avis Google (jaune #fbbc04, hors palette, à la demande).
+      La forme vient d'un masque ; le dégradé remplit l'étoile selon --f (0,9 pour la cinquième : 4,9/5).
+      L'étoile occupe de 8,3 % à 91,7 % de la largeur de sa boîte : le remplissage est calculé sur cette partie.
+    */
     .etoile {
-      width: 9px;
-      height: 15px;
-      border-radius: 50%;
-      background: linear-gradient(to right, var(--color-givre) calc(var(--f) * 100%), var(--color-ardoise) 0);
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(to right, #fbbc04 calc((0.083 + var(--f) * 0.834) * 100%), var(--color-ardoise) 0);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E")
+        center / contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E")
+        center / contain no-repeat;
+    }
+    /* Aperçu de la galerie #MonDobby : six vignettes, la dernière annonce la suite */
+    .apercu {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      max-width: 360px;
+    }
+    .vignette {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+    .vignette img {
+      object-fit: cover;
+      transition: scale 700ms var(--ease-dobby);
+    }
+    .apercu:hover .vignette img {
+      scale: 1.06;
+    }
+    .plus {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgb(13 19 22 / 0.6);
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      color: var(--color-neige);
     }
     .rond {
       display: inline-grid;
@@ -159,7 +208,9 @@ import { Reveal } from '../../ui/reveal.directive';
 })
 export class Temoins {
   protected readonly t = ACCUEIL.temoignages;
-  protected readonly peurLevee = TEMOIGNAGES.peurLevee;
+  protected readonly apercu = TEMOIGNAGES.mur.photos.slice(0, APERCU);
+  /** photos de la galerie qui ne sont pas dans l'aperçu (« +3 » sur la dernière vignette) */
+  protected readonly reste = TEMOIGNAGES.mur.photos.length - APERCU;
   protected readonly cartes = TEMOIGNAGES.cartes.filter((c) => ['vie-privee', 'temps', 'sceptiques'].includes(c.id));
   protected readonly state = inject(DobbyState);
   protected readonly index = signal(0);

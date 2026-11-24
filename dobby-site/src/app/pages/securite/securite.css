@@ -212,26 +212,3 @@ section[id] {
     line-height: 1.3;
   }
 }
-
-/* Comité */
-.comite {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-  gap: 22px 14px;
-}
-.comite li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--color-brume);
-}
-.comite svg {
-  width: 56px;
-  fill: var(--color-orage);
-}
-.comite li:nth-child(odd) svg {
-  fill: var(--color-ardoise);
-}

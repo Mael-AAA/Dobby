@@ -1,17 +1,9 @@
-<!-- 1. Haut de page : Dobby dans la pénombre -->
+<!-- 1. Haut de page : Dobby en finition cuivre, dans la pénombre -->
 <section class="hero" [class.go]="go()" aria-labelledby="hero-titre">
   <div class="robot">
     <div class="cadre-robot">
-      <img
-        ngSrc="dobby-buste-nuit"
-        [ngSrcset]="sets"
-        sizes="(min-width: 1024px) 46vw, 92vw"
-        fill
-        priority
-        class="robot-nuit"
-        alt="Dobby, assistant domestique à la visière sombre, de trois quarts dans la pénombre."
-      />
-      <img ngSrc="dobby-buste" [ngSrcset]="sets" sizes="(min-width: 1024px) 46vw, 92vw" fill class="balayage" alt="" aria-hidden="true" />
+      <img ngSrc="dobby-buste-cuivre" [ngSrcset]="sets" sizes="(min-width: 1024px) 46vw, 92vw" fill priority class="robot-cuivre" [alt]="t.hero.alt" />
+      <img ngSrc="dobby-buste-cuivre" [ngSrcset]="sets" sizes="(min-width: 1024px) 46vw, 92vw" fill class="balayage" alt="" aria-hidden="true" />
       <app-dobby-face [vw]="1600" [vh]="2600" [cx]="1150" [cy]="548" [lit]="regard()" />
     </div>
   </div>
@@ -74,16 +66,41 @@
 <section class="band theme-encre" aria-labelledby="confiance-titre">
   <div class="shell grid gap-14 lg:grid-cols-12 lg:items-center">
     <div class="relative lg:col-span-5" appReveal>
+      <!-- La photo ne s'allume qu'avec le bouton visible en haut de la nuque (zone cliquable posée dessus) -->
       <app-lit-photo
         name="nuque"
-        alt="La nuque de Dobby vue de dos : revêtement tricoté gris, visière noire."
+        [alt]="t.confiance.photo"
         sizes="(min-width: 1024px) 40vw, 100vw"
         position="45% 50%"
-        class="aspect-[4/5] rounded-[32px]"
+        origine="40% 13%"
+        [survol]="false"
+        [lit]="nuqueAllumee()"
+        class="photo-nuque aspect-[4/5] rounded-[32px]"
       >
-        <span class="cible" style="left: 52%; top: 48%" aria-hidden="true"><i></i></span>
+        <button
+          type="button"
+          class="bouton-nuque"
+          [class.decouvert]="nuqueEssayee()"
+          [attr.aria-pressed]="nuqueAllumee()"
+          aria-describedby="nuque-aide"
+          (click)="basculerNuque()"
+        >
+          <span class="sr-only">{{ t.confiance.boutonPhoto }}</span>
+        </button>
+        <!-- avant-goût : au survol du bouton, une lueur douce apparaît autour de lui -->
+        <span class="lueur-nuque" aria-hidden="true"></span>
+        <!-- petite étiquette qui montre le bouton, jusqu'au premier essai -->
+        @if (!nuqueEssayee()) {
+          <span class="invite-nuque" aria-hidden="true">{{ t.confiance.invite }}</span>
+        }
       </app-lit-photo>
-      <p class="mt-4 flex items-center gap-3 text-sm text-brume"><span class="cible-mini" aria-hidden="true"></span>{{ t.confiance.bouton }}</p>
+      <p id="nuque-aide" class="mt-4 flex items-start gap-3 text-sm">
+        <span class="cible-mini mt-[0.3em]" aria-hidden="true"></span>
+        <span>
+          <span class="block font-semibold text-neige">{{ t.confiance.bouton }}</span>
+          <span class="block text-brume">{{ t.confiance.boutonAide }}</span>
+        </span>
+      </p>
     </div>
 
     <div class="lg:col-span-7 lg:pl-8">
@@ -138,7 +155,9 @@
             </div>
             <div class="bulle-dobby">
               <p>C’est fait. Plume a mangé à 18&nbsp;h&nbsp;45.</p>
-              <app-chat class="mt-2 aspect-[3/2] overflow-hidden rounded-xl" />
+              <div class="relative mt-2 aspect-[3/2] overflow-hidden rounded-xl">
+                <img ngSrc="plume" ngSrcset="600w, 900w" sizes="240px" fill [alt]="t.application.alt" class="object-cover" />
+              </div>
             </div>
             <div class="mt-auto flex items-center gap-2 rounded-full border border-brume/25 px-4 py-2.5 text-lac">Écrire à Dobby</div>
           </div>

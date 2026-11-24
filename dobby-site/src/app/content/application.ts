@@ -84,8 +84,12 @@ export const APPLICATION = deepFr({
     titre: 'Remise en main propre.',
     texte:
       "L'application est réservée aux foyers équipés. Elle vous est remise et configurée par votre Conseiller le jour de l'installation.",
-    badges: ["Télécharger dans l'App Store", 'Disponible sur Google Play'],
-    fictif: 'Badges non cliquables : projet fictif.',
+    // les badges mènent à la page d'accueil de chaque magasin d'applications
+    badges: [
+      { label: "Télécharger dans l'App Store", url: 'https://www.apple.com/fr/app-store/' },
+      { label: 'Disponible sur Google Play', url: 'https://play.google.com/store' },
+    ],
+    nouvelOnglet: '(nouvel onglet)',
   },
   appel: { cta: 'Demander mon devis', note: "L'application est incluse." },
 });

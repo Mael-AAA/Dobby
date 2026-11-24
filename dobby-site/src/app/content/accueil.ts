@@ -21,6 +21,7 @@ export const ACCUEIL = deepFr({
     arretBouton: 'Essayez',
     defiler: 'Défiler',
     fiche: ['1,70 m pour 58 kg', 'moins de 35 dB'],
+    alt: 'Dobby, assistant domestique en finition cuivre, visière sombre, de trois quarts dans la pénombre.',
   },
   reassurance: [
     'Garantie Sérénité 10 ans',
@@ -57,6 +58,8 @@ export const ACCUEIL = deepFr({
         minutes: 19 * 60 + 30,
         lieu: 'Votre porte',
         texte: 'Vous ouvrez la porte. La lumière est douce, le dîner est servi.',
+        // photo : public/img/porte-*.webp, aussi en haut de la page Maison
+        alt: 'Dobby ouvre la porte d’entrée. Derrière lui, la table est dressée pour le dîner.',
       },
     ],
     fin: "Vous n'avez rien demandé d'autre. Ou presque.",
@@ -90,7 +93,8 @@ export const ACCUEIL = deepFr({
         id: 'animaux',
         titre: 'Animaux',
         texte: 'Repas, eau, promenade du jardin, et une photo quand vous êtes loin.',
-        objet: { entete: 'Plume a mangé', heure: '18 h 45', note: 'Photo envoyée' },
+        // photo : public/img/plume-*.webp, la même que sur la page Dobby
+        objet: { entete: 'Plume a mangé', heure: '18 h 45', note: 'Photo envoyée', alt: 'Plume, le chat tigré, mange dans sa gamelle.' },
       },
       {
         id: 'maison',
@@ -127,11 +131,21 @@ export const ACCUEIL = deepFr({
     lien: 'Tout savoir sur la sécurité',
     cta: 'Le rencontrer chez vous',
     note: 'Démonstration à domicile, sans engagement.',
-    bouton: 'Le bouton d’arrêt, sur la nuque',
+    // photo de la nuque : seul le bouton visible sur la photo l'allume et l'éteint
+    photo: 'La nuque de Dobby vue de dos : revêtement tricoté gris, visière noire, et en haut de la nuque, son bouton d’arrêt.',
+    bouton: 'Son bouton d’arrêt est en haut de la nuque, derrière la tête.',
+    boutonAide: 'Appuyez dessus : la photo s’allume. Appuyez encore : elle s’éteint.',
+    boutonPhoto: 'Allumer la photo avec le bouton de la nuque',
+    invite: 'Appuyez ici',
   },
   chiffres: {
     titre: 'Ce que Dobby a déjà changé.',
-    foyers: { label: 'foyers équipés', detail: 'dans 5 pays' },
+    // photo : public/img/salon-*.webp
+    foyers: {
+      label: 'foyers équipés',
+      detail: 'dans 5 pays',
+      alt: 'Dans son salon, au coucher du soleil, un homme présente Dobby à ses invités.',
+    },
     heures: { label: 'heures rendues chaque semaine', detail: '19 heures sur les 168 d’une semaine, en moyenne' },
     satisfaction: { label: 'de clients satisfaits', detail: '4,9/5 sur 1 840 avis' },
     incidents: { label: 'incident de sécurité', detail: 'depuis le lancement, en mars 2025' },
@@ -140,6 +154,8 @@ export const ACCUEIL = deepFr({
     titre: 'Même loin, vous êtes chez vous.',
     texte: "Une tâche oubliée ? Confiez-la à Dobby depuis l'application. Il vous confirme quand c'est fait.",
     lien: "Découvrir l'application",
+    // photo envoyée dans le téléphone : public/img/plume-*.webp
+    alt: 'Plume, le chat tigré, mange dans sa gamelle.',
   },
   temoignages: {
     titre: 'Ils ont ouvert leur porte.',

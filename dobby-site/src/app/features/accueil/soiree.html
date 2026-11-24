@@ -98,7 +98,18 @@
                     </app-lit-photo>
                   }
                   @default {
-                    <app-facade [lit]="!pinned() || step() >= 3" class="photo" />
+                    <!-- Dobby ouvre la porte : la photo s'allume à 19 h 30, la lumière part de son visage -->
+                    <app-lit-photo
+                      name="porte"
+                      [alt]="e.alt ?? ''"
+                      sizes="(min-width: 1024px) 120vh, 120vw"
+                      origine="67% 17%"
+                      [lit]="pinned() ? step() >= 3 : undefined"
+                      [autoLight]="!pinned()"
+                      class="photo"
+                    >
+                      <app-dobby-face [vw]="1492" [vh]="941" [cx]="909" [cy]="156" [s]="0.17" [angle]="-7" [lit]="!pinned() || step() >= 3" />
+                    </app-lit-photo>
                   }
                 }
               </div>

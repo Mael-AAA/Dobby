@@ -13,10 +13,10 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ACCUEIL } from '../../content/accueil';
 import { ScrollService } from '../../core/scroll.service';
+import { DobbyFace } from '../../ui/dobby-face';
 import { Coche } from '../../ui/icons';
 import { LitPhoto } from '../../ui/lit-photo';
 import { Phone } from '../../ui/phone';
-import { Facade } from './facade';
 
 /** Position de chaque étape dans le défilement de la section épinglée */
 const REPERES = [0.03, 0.29, 0.55, 0.8];
@@ -28,7 +28,7 @@ const REPERES = [0.03, 0.29, 0.55, 0.8];
  */
 @Component({
   selector: 'app-soiree',
-  imports: [LitPhoto, Phone, Coche, Facade],
+  imports: [LitPhoto, Phone, Coche, DobbyFace],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   templateUrl: './soiree.html',

@@ -4,8 +4,8 @@ import { SITE } from '../content/site';
 import { Reveal } from './reveal.directive';
 
 /**
- * Bloc d'appel de fin de page : un grand aplat Givre, la lumière au bout du parcours.
- * Chaque page passe son libellé, sa micro-réassurance et ses paramètres de devis.
+ * Bloc d'appel de fin de page : sur fond noir, un grand rectangle Givre aux coins arrondis,
+ * la lumière au bout du parcours. Chaque page passe son libellé, sa micro-réassurance et ses paramètres de devis.
  */
 @Component({
   selector: 'app-cta-block',
@@ -13,38 +13,51 @@ import { Reveal } from './reveal.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
-    <section class="theme-givre relative overflow-hidden" [attr.aria-labelledby]="id()">
-      <svg
-        class="sourire pointer-events-none absolute inset-x-0 bottom-0 h-28 w-full md:h-40"
-        viewBox="0 0 1000 100"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path d="M-20 46 Q500 168 1020 46" fill="none" stroke="#151d20" stroke-width="2" vector-effect="non-scaling-stroke" pathLength="1" />
-      </svg>
-      <div class="shell relative grid gap-10 py-24 md:py-32 lg:grid-cols-12 lg:items-end">
-        <div class="lg:col-span-7" appReveal>
-          <h2 class="titre" [id]="id()">{{ titre() || defaut.titre }}</h2>
-          <p class="intro mt-6">{{ texte() || defaut.texte }}</p>
-        </div>
-        <div class="flex flex-col items-start gap-4 lg:col-span-5 lg:items-end lg:text-right" appReveal="2">
-          <div class="flex flex-wrap gap-3 lg:justify-end">
-            <span class="relative inline-flex">
-              <span class="halo" aria-hidden="true"></span>
-              <a class="btn btn-sombre relative" routerLink="/devis" [queryParams]="params()">{{ cta() }}</a>
-            </span>
-            @if (secondaire()) {
-              <a class="btn btn-secondaire-sombre" [routerLink]="secondairePath()">{{ secondaire() }}</a>
+    <section class="appel" [attr.aria-labelledby]="id()">
+      <div class="encart theme-givre">
+        <svg
+          class="sourire pointer-events-none absolute inset-x-0 bottom-0 h-28 w-full md:h-40"
+          viewBox="0 0 1000 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path d="M-20 46 Q500 168 1020 46" fill="none" stroke="#151d20" stroke-width="2" vector-effect="non-scaling-stroke" pathLength="1" />
+        </svg>
+        <div class="shell relative grid gap-10 py-20 md:py-28 lg:grid-cols-12 lg:items-end">
+          <div class="lg:col-span-7" appReveal>
+            <h2 class="titre" [id]="id()">{{ titre() || defaut.titre }}</h2>
+            <p class="intro mt-6">{{ texte() || defaut.texte }}</p>
+          </div>
+          <div class="flex flex-col items-start gap-4 lg:col-span-5 lg:items-end lg:text-right" appReveal="2">
+            <div class="flex flex-wrap gap-3 lg:justify-end">
+              <span class="relative inline-flex">
+                <span class="halo" aria-hidden="true"></span>
+                <a class="btn btn-sombre relative" routerLink="/devis" [queryParams]="params()">{{ cta() }}</a>
+              </span>
+              @if (secondaire()) {
+                <a class="btn btn-secondaire-sombre" [routerLink]="secondairePath()">{{ secondaire() }}</a>
+              }
+            </div>
+            @if (note()) {
+              <p class="note">{{ note() }}</p>
             }
           </div>
-          @if (note()) {
-            <p class="note">{{ note() }}</p>
-          }
         </div>
       </div>
     </section>
   `,
   styles: `
+    /* fond noir autour du rectangle : ses coins arrondis restent visibles */
+    .appel {
+      display: block;
+      padding: clamp(24px, 4vw, 48px) var(--marge-encart) 0;
+      background: var(--color-encre);
+    }
+    .encart {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-bloc);
+    }
     .sourire path {
       opacity: 0.35;
       stroke-dasharray: 1;

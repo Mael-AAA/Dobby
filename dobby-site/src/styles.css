@@ -50,6 +50,8 @@
 
 @layer base {
   html {
+    /* retrait des rectangles arrondis de fin de page (bloc d'appel, pied de page) par rapport aux bords */
+    --marge-encart: clamp(12px, 1.6vw, 24px);
     background: var(--color-nuit);
     color: var(--color-brume);
     color-scheme: dark;
@@ -448,13 +450,6 @@ html.lenis body {
   50% {
     opacity: 0.9;
     transform: scale(1.06);
-  }
-}
-
-/* Défilement d'un bandeau (partenaires) */
-@keyframes defile {
-  to {
-    transform: translateX(-50%);
   }
 }
 

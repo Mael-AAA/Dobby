@@ -1,4 +1,4 @@
-<!-- 1. Hero : la maison s'allume -->
+<!-- 1. Hero : Dobby ouvre la porte, la photo s'allume depuis son visage -->
 <section class="hero" aria-labelledby="maison-titre">
   <div class="shell grid gap-12 pt-36 pb-20 lg:grid-cols-12 lg:items-end lg:pt-44">
     <div class="lg:col-span-6">
@@ -6,20 +6,38 @@
       <p class="intro mt-8" appReveal="1">{{ t.hero.texte }}</p>
     </div>
     <div class="lg:col-span-6" appReveal="1">
-      <app-facade [lit]="maisonAllumee()" class="aspect-[5/4] overflow-hidden rounded-[32px]" />
+      <app-lit-photo
+        name="porte"
+        [alt]="t.hero.alt"
+        sizes="(min-width: 1024px) 52vw, 115vw"
+        origine="64% 17%"
+        [priority]="true"
+        [lit]="photoAllumee()"
+        class="aspect-[5/4] rounded-[32px]"
+      >
+        <app-dobby-face [vw]="1492" [vh]="941" [cx]="909" [cy]="156" [s]="0.17" [angle]="-7" [lit]="photoAllumee()" />
+      </app-lit-photo>
     </div>
   </div>
 </section>
 
-<!-- 2. Notre histoire : la frise avance au défilement -->
-<section #frise class="frise-section" aria-labelledby="histoire-titre">
-  <div class="shell">
+<!-- 2. Notre histoire : la frise avance avec les flèches (ou au doigt), les dates s'allument en arrivant -->
+<section class="frise-section" aria-labelledby="histoire-titre">
+  <div class="shell entete-bande">
     <h2 id="histoire-titre" class="titre" appReveal>{{ t.histoire.titre }}</h2>
+    <div class="fleches" appReveal="1">
+      <button type="button" class="rond" [attr.aria-disabled]="frise.debut() || null" (click)="frise.precedent()" [attr.aria-label]="t.histoire.precedent">
+        <app-fleche class="rotate-180" />
+      </button>
+      <button type="button" class="rond" [attr.aria-disabled]="frise.fin() || null" (click)="frise.suivant()" [attr.aria-label]="t.histoire.suivant">
+        <app-fleche />
+      </button>
+    </div>
   </div>
-  <div class="frise-cadre">
-    <ol #piste class="piste">
+  <div class="bande frise-cadre" appDefilement #frise="defilement" tabindex="0" role="region" [attr.aria-label]="t.histoire.bande">
+    <ol class="piste">
       @for (d of t.histoire.dates; track d.annee; let i = $index) {
-        <li class="date" [class.passee]="i <= annee()">
+        <li class="date" [class.passee]="i <= frise.dernierVisible()">
           <span class="point" aria-hidden="true"></span>
           <p class="annee">{{ d.annee }}</p>
           <p class="mt-4 text-[1.05rem] text-brume">{{ d.texte }}</p>
@@ -29,26 +47,24 @@
   </div>
 </section>
 
-<!-- 3. Les fondateurs -->
+<!-- 3. Les fondateurs : un grand portrait sur fond clair, le prénom et la citation à côté (alternés sur ordinateur) -->
 <section class="band theme-encre" aria-labelledby="fondateurs-titre">
   <div class="shell">
     <h2 id="fondateurs-titre" class="titre" appReveal>{{ t.fondateurs.titre }}</h2>
-    <div class="mt-14 grid gap-12 lg:grid-cols-2">
-      @for (f of t.fondateurs.items; track f.nom; let i = $index) {
-        <figure class="fondateur" [appReveal]="i">
-          <div class="portrait" aria-hidden="true">
-            <span>{{ f.initiales }}</span>
+    <ul class="fondateurs">
+      @for (f of t.fondateurs.items; track f.nom) {
+        <li class="fondateur">
+          <div class="portrait" appReveal>
+            <img [ngSrc]="f.img" ngSrcset="360w, 540w" sizes="(min-width: 768px) 440px, 100vw" fill [alt]="f.alt" class="object-cover" />
           </div>
-          <div>
-            <blockquote class="font-display text-[clamp(1.6rem,2.4vw,2.1rem)] leading-snug text-neige">«&nbsp;{{ f.citation }}&nbsp;»</blockquote>
-            <figcaption class="mt-6">
-              <span class="block font-semibold text-neige">{{ f.nom }}</span>
-              <span class="block text-sm text-lac">{{ f.role }}</span>
-            </figcaption>
+          <div class="texte-fondateur" appReveal="1">
+            <h3 class="font-display text-[clamp(2.4rem,3.6vw,3.4rem)] leading-none">{{ f.nom }}</h3>
+            <p class="mt-3 text-sm text-lac">{{ f.role }}</p>
+            <blockquote class="mt-6 font-display text-[clamp(1.5rem,2.2vw,2.1rem)] leading-snug text-neige">«&nbsp;{{ f.citation }}&nbsp;»</blockquote>
           </div>
-        </figure>
+        </li>
       }
-    </div>
+    </ul>
   </div>
 </section>
 
@@ -115,20 +131,26 @@
   </div>
 </section>
 
-<!-- 7. Nos partenaires : un bandeau qui défile -->
+<!-- 7. Nos partenaires : un bandeau que l'on fait défiler avec les flèches (ou au doigt) -->
 <section class="band theme-encre overflow-hidden" aria-labelledby="partenaires-titre">
-  <div class="shell">
+  <div class="shell entete-bande">
     <h2 id="partenaires-titre" class="titre" appReveal>{{ t.partenaires.titre }}</h2>
+    <div class="fleches" appReveal="1">
+      <button type="button" class="rond" [attr.aria-disabled]="bandeau.debut() || null" (click)="bandeau.precedent()" [attr.aria-label]="t.partenaires.precedent">
+        <app-fleche class="rotate-180" />
+      </button>
+      <button type="button" class="rond" [attr.aria-disabled]="bandeau.fin() || null" (click)="bandeau.suivant()" [attr.aria-label]="t.partenaires.suivant">
+        <app-fleche />
+      </button>
+    </div>
   </div>
-  <div class="bandeau mt-14" appReveal="1">
-    <ul class="defile-partenaires">
-      @for (tour of [0, 1]; track tour) {
-        @for (p of t.partenaires.items; track p.nom; let i = $index) {
-          <li class="partenaire" [attr.aria-hidden]="tour === 1 ? 'true' : null">
-            <span class="marque" [class]="'m' + i">{{ p.nom }}</span>
-            <span class="mt-2 block text-sm text-lac">{{ p.role }}</span>
-          </li>
-        }
+  <div class="bande mt-14" appDefilement #bandeau="defilement" tabindex="0" role="region" [attr.aria-label]="t.partenaires.bande">
+    <ul class="piste-partenaires">
+      @for (p of t.partenaires.items; track p.nom; let i = $index) {
+        <li class="partenaire">
+          <span class="marque" [class]="'m' + i">{{ p.nom }}</span>
+          <span class="mt-2 block text-sm text-lac">{{ p.role }}</span>
+        </li>
       }
     </ul>
   </div>

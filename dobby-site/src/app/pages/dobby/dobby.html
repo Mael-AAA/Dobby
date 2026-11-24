@@ -11,14 +11,7 @@
     </div>
     <div class="scene">
       <div #robot class="robot">
-        <img
-          ngSrc="dobby-pied-nuit"
-          [ngSrcset]="sets"
-          sizes="(min-width: 1024px) 30vw, 70vw"
-          fill
-          priority
-          alt="Dobby en pied, de face : visière sombre, revêtement clair, silhouette fine."
-        />
+        <img ngSrc="finition-cuivre" [ngSrcset]="sets" sizes="(min-width: 1024px) 30vw, 70vw" fill priority [alt]="t.hero.alt" />
         <app-dobby-face [vw]="1700" [vh]="4534" [cx]="443" [cy]="548" [lit]="lit()" />
       </div>
       <ul class="reperes">
@@ -60,7 +53,16 @@
               @switch (s.id) {
                 @case ('animaux') {
                   <div class="panneau-sf">
-                    <app-chat class="aspect-[3/2] overflow-hidden rounded-2xl" />
+                    <div class="relative aspect-[3/2] overflow-hidden rounded-2xl">
+                      <img
+                        ngSrc="plume"
+                        ngSrcset="600w, 900w"
+                        sizes="(min-width: 1024px) 30vw, (min-width: 900px) 46vw, 90vw"
+                        fill
+                        [alt]="t.savoirFaire.plume.alt"
+                        class="object-cover"
+                      />
+                    </div>
                     <p class="mt-5 text-sm font-semibold text-neige">{{ t.savoirFaire.plume.titre }}</p>
                     <ul class="mt-2">
                       @for (l of t.savoirFaire.plume.lignes; track l.h) {

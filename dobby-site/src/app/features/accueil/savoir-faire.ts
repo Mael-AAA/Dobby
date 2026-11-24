@@ -1,8 +1,8 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ACCUEIL } from '../../content/accueil';
 import { SoundService } from '../../core/sound.service';
-import { Chat } from '../../ui/chat';
 import { Coche, Fleche } from '../../ui/icons';
 import { Reveal } from '../../ui/reveal.directive';
 
@@ -12,7 +12,7 @@ import { Reveal } from '../../ui/reveal.directive';
  */
 @Component({
   selector: 'app-savoir-faire',
-  imports: [RouterLink, Reveal, Coche, Fleche, Chat],
+  imports: [NgOptimizedImage, RouterLink, Reveal, Coche, Fleche],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   templateUrl: './savoir-faire.html',
@@ -24,7 +24,7 @@ export class SavoirFaire {
   protected readonly obj = {
     cuisine: this.c[0].objet as { entete: string; lignes: string[]; note: string },
     entretien: this.c[1].objet as { entete: string; lignes: string[] },
-    animaux: this.c[2].objet as { entete: string; heure: string; note: string },
+    animaux: this.c[2].objet as { entete: string; heure: string; note: string; alt: string },
     maison: this.c[3].objet as { entete: string; temperature: string; lignes: string[] },
     demarches: this.c[4].objet as {
       entete: string;

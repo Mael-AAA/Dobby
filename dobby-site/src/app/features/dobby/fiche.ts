@@ -15,7 +15,7 @@ import { Reveal } from '../../ui/reveal.directive';
       <div class="shell grid gap-14 lg:grid-cols-12 lg:items-start">
         <div class="lg:col-span-5" appReveal>
           <div class="robot">
-            <img ngSrc="dobby-pied-nuit" [ngSrcset]="sets" sizes="(min-width: 1024px) 34vw, 80vw" fill alt="Dobby en pied, de face, revêtement clair et visière sombre." />
+            <img ngSrc="finition-cuivre" [ngSrcset]="sets" sizes="(min-width: 1024px) 34vw, 80vw" fill [alt]="t.alt" />
             @for (r of t.reperes; track r.id) {
               <button
                 type="button"
@@ -128,7 +128,8 @@ import { Reveal } from '../../ui/reveal.directive';
 })
 export class Fiche {
   protected readonly t = DOBBY.fiche;
-  protected readonly sets = srcset('dobby-pied');
+  /** Dobby en pied, en finition cuivre (même cadrage que dobby-pied : les repères restent en place) */
+  protected readonly sets = srcset('finition-cuivre');
   protected readonly ouvert = signal<string>('visiere');
   protected readonly actif = computed(() => this.t.reperes.find((r) => r.id === this.ouvert()));
 

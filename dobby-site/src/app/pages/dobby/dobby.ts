@@ -24,7 +24,6 @@ import { Finitions } from '../../features/dobby/finitions';
 import { Mission } from '../../features/dobby/mission';
 import { Residences } from '../../features/dobby/residences';
 import { Salon } from '../../features/dobby/salon';
-import { Chat } from '../../ui/chat';
 import { CtaBlock } from '../../ui/cta-block';
 import { DobbyFace } from '../../ui/dobby-face';
 import { LitPhoto } from '../../ui/lit-photo';
@@ -38,7 +37,6 @@ import { Reveal } from '../../ui/reveal.directive';
     Reveal,
     DobbyFace,
     LitPhoto,
-    Chat,
     CtaBlock,
     Mission,
     Salon,
@@ -53,7 +51,8 @@ import { Reveal } from '../../ui/reveal.directive';
 })
 export class DobbyPage {
   protected readonly t = DOBBY;
-  protected readonly sets = srcset('dobby-pied');
+  /** Dobby en pied, en finition cuivre (même cadrage que dobby-pied) */
+  protected readonly sets = srcset('finition-cuivre');
   protected readonly state = inject(DobbyState);
   private readonly scroll = inject(ScrollService);
   private readonly sound = inject(SoundService);

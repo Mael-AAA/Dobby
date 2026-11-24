@@ -1,8 +1,9 @@
 // Prépare les images du site à partir du dossier ../Image
 // - retouche : marques et filigranes masqués (clonage du tissu voisin)
-// - deux versions par photo : « jour » (couleurs réelles) et « nuit » (dégradé de la palette Couleur.png)
-// - trois finitions du robot détouré : nacre, obsidienne, cuivre
-// Lancer : node scripts/images.mjs
+// - deux versions par photo : « jour » (couleurs réelles) et « nuit » (dégradé de la palette Couleur.png),
+//   sauf la photo de Plume, que Dobby envoie : elle n'existe qu'en vraies couleurs
+// - trois finitions du robot détouré : nacre, obsidienne, cuivre (et le buste cuivre du haut de l'accueil)
+// Lancer : node scripts/images.mjs (les portraits des fondateurs : node scripts/portraits.mjs)
 import sharp from 'sharp';
 import { mkdir } from 'node:fs/promises';
 
@@ -201,6 +202,8 @@ const pied = await retouch(src('Dobby.webp'), {
 // Buste retourné pour le haut de l'accueil (le robot sort du cadre par la droite)
 const buste = await sharp(pied).extract({ left: 0, top: 0, width: 1600, height: 2600 }).flop().png().toBuffer();
 await both(buste, 'dobby-buste', [700, 1200], 1.05, true);
+// le haut de l'accueil montre le buste en finition cuivre (même teinte que la finition de la page Dobby)
+await save(await gradientMap(buste, CUIVRE, 1.05), 'dobby-buste-cuivre', [700, 1200], { alpha: true });
 
 // Pied complet (tête aux cuisses) et trois finitions
 const entier = await sharp(pied).extract({ left: 0, top: 0, width: 1700, height: 4534 }).png().toBuffer();
@@ -289,6 +292,25 @@ const faceSvg = (w, h, cx, cy, s = 1) => `<svg xmlns="http://www.w3.org/2000/svg
     <path d="M18.5 41.5 Q32 51 45.5 41.5" fill="none" stroke="#e7f3f9" stroke-width="4" stroke-linecap="round"/></svg>`);
   await sharp(icon).png().toFile(decodeURIComponent(new URL('../public/apple-touch-icon.png', import.meta.url).pathname).replace(/^\/([A-Za-z]:)/, '$1'));
 }
+
+// 8. Plume, le chat de la famille : c'est la photo que Dobby envoie, elle reste en vraies couleurs (pas de version nuit)
+await save(src('Chat Plume.png'), 'plume', [600, 900]);
+
+// 9. Le comité d'éthique en réunion (page Sécurité)
+// (une largeur intermédiaire pour les écrans réglés à 125 %, courants sur les portables)
+await both(src('Comité éthique.png'), 'comite', [700, 1000, 1400]);
+
+// 10. Dobby ouvre la porte (accueil à 19 h 30, haut de la page Maison)
+// - 180 px retirés à gauche (mur extérieur) : le centre de l'image tombe entre la table et Dobby,
+//   ce qui garde Dobby et sa main sur la poignée dans les cadres étroits
+// - le visage de Dobby est posé par-dessus en SVG (ui/dobby-face.ts), dans le repère de cette image recadrée
+const porte = await sharp(src('Dobby porte.png')).extract({ left: 180, top: 0, width: 1492, height: 941 }).png().toBuffer();
+// (pas de version 900 : le cadre de l'accueil est presque carré, la photo s'y affiche plus large que lui,
+//  et Angular laisse le navigateur choisir d'après la largeur du cadre)
+await both(porte, 'porte', [1200, 1492]);
+
+// 11. Un client présente Dobby dans son salon (accueil, tuile « 3 200 foyers »)
+await both(src('Dobby salon.png'), 'salon', [700, 1200, 1672]);
 
 console.log('Images prêtes dans public/img');
 

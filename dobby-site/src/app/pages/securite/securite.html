@@ -65,8 +65,9 @@
         position="45% 50%"
         class="aspect-[5/4] rounded-[32px]"
       >
-        <span class="repere-nuque" style="left: 52%; top: 48%" aria-hidden="true"><i></i></span>
-        <span class="etiquette-nuque" style="left: 52%; top: 48%" aria-hidden="true">{{ t.arret.repere }}</span>
+        <!-- sur le vrai bouton : le rond sombre du module clair, en haut de la nuque -->
+        <span class="repere-nuque" style="left: 41.2%; top: 17.7%" aria-hidden="true"><i></i></span>
+        <span class="etiquette-nuque" style="left: 41.2%; top: 17.7%" aria-hidden="true">{{ t.arret.repere }}</span>
       </app-lit-photo>
     </div>
     <div class="lg:col-span-5 lg:col-start-8">
@@ -190,17 +191,9 @@
       <p class="intro mt-6" appReveal="1">{{ t.comite.texte }}</p>
       <a routerLink="/maison-dobby" class="lien mt-8" appReveal="2">{{ t.comite.lien }} <app-fleche /></a>
     </div>
-    <ul class="comite lg:col-span-7" aria-label="Les sept membres du comité">
-      @for (m of t.comite.membres; track $index; let i = $index) {
-        <li [appReveal]="i">
-          <svg viewBox="0 0 60 70" aria-hidden="true">
-            <circle cx="30" cy="22" r="13" />
-            <path d="M6 70 Q6 42 30 42 Q54 42 54 70 Z" />
-          </svg>
-          <span>{{ m }}</span>
-        </li>
-      }
-    </ul>
+    <div class="lg:col-span-7" appReveal="1">
+      <app-lit-photo name="comite" [alt]="t.comite.alt" sizes="(min-width: 1024px) 50vw, 100vw" class="aspect-[3/2] rounded-[32px]" />
+    </div>
   </div>
 </section>
 

@@ -120,15 +120,8 @@ export const SECURITE = deepFr({
     texte:
       'Un comité indépendant de sept experts (droit, médecine, philosophie, cybersécurité) valide chaque nouvelle capacité avant sa sortie. Ses avis sont publiés.',
     lien: 'La Maison Dobby',
-    membres: [
-      'Juriste',
-      'Juriste',
-      'Médecin pédiatre',
-      'Philosophe',
-      'Cybersécurité',
-      'Cybersécurité',
-      'Association de consommateurs',
-    ],
+    // photo : public/img/comite-*.webp, préparée par scripts/images.mjs
+    alt: 'Le comité d’éthique en réunion, autour d’une tablette et de documents.',
   },
   appel: {
     titre: 'Vous avez une question précise ?',

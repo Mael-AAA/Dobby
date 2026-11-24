@@ -20,7 +20,6 @@ import { Chiffres } from '../../features/accueil/chiffres';
 import { SavoirFaire } from '../../features/accueil/savoir-faire';
 import { Soiree } from '../../features/accueil/soiree';
 import { Temoins } from '../../features/accueil/temoins';
-import { Chat } from '../../ui/chat';
 import { CtaBlock } from '../../ui/cta-block';
 import { DobbyFace } from '../../ui/dobby-face';
 import { Fleche } from '../../ui/icons';
@@ -38,7 +37,6 @@ import { Reveal, onceVisible } from '../../ui/reveal.directive';
     DobbyFace,
     LitPhoto,
     Phone,
-    Chat,
     Fleche,
     CtaBlock,
     Soiree,
@@ -57,7 +55,11 @@ export class Accueil {
   private readonly scroll = inject(ScrollService);
 
   protected readonly mots = ACCUEIL.hero.titre.split(' ');
-  protected readonly sets = srcset('dobby-buste');
+  protected readonly sets = srcset('dobby-buste-cuivre');
+  /** photo de la nuque : allumée et éteinte par le bouton visible sur la photo */
+  protected readonly nuqueAllumee = signal(false);
+  /** le halo d'appel sur le bouton s'arrête une fois le bouton essayé */
+  protected readonly nuqueEssayee = signal(false);
   /** l'animation d'ouverture démarre quand l'écran d'entrée est refermé */
   protected readonly go = signal(false);
   protected readonly regard = signal(false);
@@ -82,6 +84,11 @@ export class Accueil {
 
   protected essayer() {
     this.stop.trigger();
+  }
+
+  protected basculerNuque() {
+    this.nuqueEssayee.set(true);
+    this.nuqueAllumee.update((v) => !v);
   }
 
   protected descendre() {

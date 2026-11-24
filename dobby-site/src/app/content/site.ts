@@ -70,8 +70,6 @@ export const SITE = deepFr({
     label: 'Label Sécurité Domestique IESD, Niveau 5',
     garantie: 'Garantie Sérénité 10 ans',
     copyright: '© 2026 Maison Dobby',
-    fictif:
-      'Projet fictif réalisé dans le cadre du BUT Techniques de Commercialisation. Marque, chiffres, avis et partenaires sont imaginaires. Dobby est un personnage créé par J.K. Rowling.',
   },
   cookies: {
     texte:

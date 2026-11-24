@@ -47,11 +47,17 @@ Les photos sources sont dans `../Image`. Le script `scripts/images.mjs` les pré
 
 - retouche : logos et inscriptions du robot d'origine effacés, filigrane retiré par recadrage, visière repeinte (le visage de Dobby est dessiné en SVG par-dessus) ;
 - deux versions de chaque photo : « jour » (couleurs réelles) et « nuit » (dégradé de la palette) ;
-- trois finitions du robot détouré : Obsidienne, Nacre, Cuivre ;
+- trois finitions du robot détouré : Obsidienne, Nacre, Cuivre (le haut de l'accueil montre le buste en Cuivre) ;
 - formats web en deux largeurs, image de partage `og.jpg` et icône d'application.
 
 ```bash
 node scripts/images.mjs
+```
+
+Les portraits des fondateurs (`../Image/Fondateur Maël.png` et `../Image/Fondateur Theddy.png`, sur fond blanc) passent par un second script : le fond blanc devient transparent et les deux photos reçoivent le même cadrage. Pour changer une photo, remplacer le fichier en gardant son nom, ajuster son cadre (position et taille, en bas du script), puis relancer :
+
+```bash
+node scripts/portraits.mjs
 ```
 
 Les photos montrent encore le robot Figure 03 (marques retirées). Elles sont à remplacer par les visuels Dobby définitifs dès qu'ils existent (section 17 du document de contenu) : déposer les nouvelles images dans `../Image`, adapter les noms dans le script, relancer.

@@ -130,7 +130,8 @@ export class RobotFinition {
 })
 export class Finitions {
   protected readonly t = DOBBY.finitions;
-  readonly choix = model<Finition>('nacre');
+  /** Cuivre par défaut, comme le Dobby du haut de l'accueil et de cette page */
+  readonly choix = model<Finition>('cuivre');
   private readonly sound = inject(SoundService);
   protected readonly nomChoisi = computed(() => this.t.choix.find((c) => c.id === this.choix())?.nom ?? '');
 

@@ -19,7 +19,7 @@ export const LEGAL: Record<string, PageLegale> = deepFr({
           'Téléphone : 01 99 00 24 24. E-mail : conseil@maison-dobby.fr.',
         ],
       },
-      { titre: 'Directeur de la publication', texte: ['Hugo Valcourt, cofondateur (personnage fictif).'] },
+      { titre: 'Directeur de la publication', texte: ['Maël et Theddy, cofondateurs.'] },
       {
         titre: 'Hébergement',
         texte: ['Site statique hébergé par un prestataire situé dans l’Union européenne. Aucune donnée de formulaire n’est conservée par l’hébergeur.'],

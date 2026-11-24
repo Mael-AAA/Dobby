@@ -13,7 +13,6 @@ import { RouterLink } from '@angular/router';
 import { APPLICATION } from '../../content/application';
 import { DobbyState } from '../../core/dobby-state.service';
 import { SoundService } from '../../core/sound.service';
-import { Chat } from '../../ui/chat';
 import { Coche } from '../../ui/icons';
 import { Phone } from '../../ui/phone';
 import { Reveal, onceVisible } from '../../ui/reveal.directive';
@@ -26,7 +25,7 @@ type Etape = 'vide' | 'saisie' | 'envoye' | 'confirme' | 'fait';
  */
 @Component({
   selector: 'app-demo-tache',
-  imports: [NgOptimizedImage, RouterLink, Phone, Chat, Coche, Reveal],
+  imports: [NgOptimizedImage, RouterLink, Phone, Coche, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
@@ -63,16 +62,9 @@ type Etape = 'vide' | 'saisie' | 'envoye' | 'confirme' | 'fait';
                 }
                 @if (etape() === 'fait') {
                   <div class="bulle lui photo">
-                    @switch (r().photo) {
-                      @case ('plume') {
-                        <app-chat class="block aspect-[3/2] overflow-hidden rounded-xl" />
-                      }
-                      @default {
-                        <div class="relative aspect-[3/2] overflow-hidden rounded-xl">
-                          <img [ngSrc]="r().photo" [ngSrcset]="r().photo === 'linge' ? '600w' : '900w'" sizes="260px" fill alt="" class="object-cover" />
-                        </div>
-                      }
-                    }
+                    <div class="relative aspect-[3/2] overflow-hidden rounded-xl">
+                      <img [ngSrc]="r().photo" [ngSrcset]="r().photo === 'linge' ? '600w' : '900w'" sizes="260px" fill alt="" class="object-cover" />
+                    </div>
                     <p class="mt-2 flex items-center gap-2"><app-coche [size]="18" class="text-givre" />{{ r().fait }}</p>
                     <p class="mt-1 text-[11px] text-lac">{{ r().legende }}</p>
                   </div>
